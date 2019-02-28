@@ -1,0 +1,99 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Pesquisa Convenios</ui:define>
+
+	<ui:define name="corpo">
+
+		<f:metadata>
+			<o:viewParam name="convenio" />
+			<f:event listener="#{pesquisaConvenioBean.init}" type="preRenderView" />
+		</f:metadata>
+
+		<h:form id="frmConvenios">
+			<h1>Pesquisa de Convênios</h1>
+
+			<p:messages id="messagesP" autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:commandButton value="Pesquisar" disabled="true" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:commandButton process="@this" value="Novo"
+						oncomplete="PF('dlgConvenio').show()"
+						actionListener="#{pesquisaConvenioBean.novo}"
+						update=":frmConvenios:dlgConvenio" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="conveniosTable" var="convenio"
+				value="#{pesquisaConvenioBean.convenios}" rowKey="#{convenio}"
+				style="margin-top: 20px" emptyMessage="Nenhum convênio encontrado."
+				rows="20" paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+
+				<p:column headerText="Código" style="text-align: center; width:5% ">
+					<h:outputText value="#{convenio.id}" />
+				</p:column>
+
+				<p:column headerText="Descrição" style="text-align: center; ">
+					<h:outputText value="#{convenio.descricao}" />
+				</p:column>
+
+				<p:column style="width: 100px; text-align: center">
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						oncomplete="PF('dlgConvenio').show()" process="@this"
+						update=":frmConvenios:dlgConvenio">
+						<f:setPropertyActionListener
+							target="#{pesquisaConvenioBean.convenioSelecionado}"
+							value="#{convenio}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						oncomplete="PF('confirmacaoExclusao').show()" process="@this"
+						update=":frmConvenios:confirmacaoExclusaoDialog">
+						<f:setPropertyActionListener
+							target="#{pesquisaConvenioBean.convenioSelecionado}"
+							value="#{convenio}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+
+			<p:dialog header="Cadastro de Convênios" widgetVar="dlgConvenio"
+				modal="true" width="50%">
+				<p:panelGrid columns="2" id="dlgConvenio"
+					style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+
+					<p:outputLabel value="Descrição" for="nomeConvenio" />
+					<p:inputText id="nomeConvenio" size="40" maxlength="40"
+						value="#{pesquisaConvenioBean.convenioSelecionado.descricao}" />
+				</p:panelGrid>
+				
+				<div align="right" style="margin-top: 10px">
+					<p:commandButton update="conveniosTable" icon="ui-icon-plus"
+						value="Salvar" actionListener="#{pesquisaConvenioBean.salvar}"
+						oncomplete="PF('dlgConvenio').hide()" />
+				</div>
+				
+			</p:dialog>
+
+			<p:confirmDialog header="Exclusão de Convenio"
+				message="Tem certeza que deseja excluir o convenio #{pesquisaConvenioBean.convenioSelecionado.descricao}?"
+				widgetVar="confirmacaoExclusao" id="confirmacaoExclusaoDialog">
+				<p:button value="Não"
+					onclick="PF('confirmacaoExclusao').hide(); return false;" />
+				<p:commandButton value="Sim"
+					oncomplete="PF('confirmacaoExclusao').hide()"
+					action="#{pesquisaConvenioBean.excluir}" process="@this"
+					update=":frmConvenios:conveniosTable" />
+			</p:confirmDialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

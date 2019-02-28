@@ -1,0 +1,152 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Atendimentos</ui:define>
+	<ui:define name="corpo">
+		<f:metadata>
+			<o:viewParam name="atendimento" />
+			<f:event listener="#{cadastroAtendimentoBean.init}"
+				type="preRenderView" />
+		</f:metadata>
+	<h:form id="frmAtendimento">
+			<h1>Atendimentos</h1>
+
+			<p:growl id="msgs" />
+
+			<p:outputPanel id="panel">
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-3">
+						<h2>Pacientes do dia</h2>
+						<p:dataList id="listaHoje" value="#{cadastroAtendimentoBean.atendimentosDia}" rowIndexVar="linha"
+							var="atend" emptyMessage="Você não tem pacientes hoje." >
+
+							<p:commandLink update=":frmAtendimento:atendDialog"	oncomplete="PF('atendDialog').show();" title="Visualizar"
+								styleClass="ui-icon ui-icon-search" process="@this"
+								style="float:left;margin-right:10px" actionListener="#{cadastroAtendimentoBean.carregarAtendimento(linha)}" >
+							</p:commandLink>
+							<h:outputText value="#{atend.paciente.nome}" />
+							
+    					</p:dataList>
+					</div>
+					<div class="ui-g-12 ui-md-9 ui-g-nopad">
+						
+						<p:schedule id="schedule" value="#{cadastroAtendimentoBean.schedule}" resizable="false"
+						widgetVar="atendSchedule" timeZone="GMT-3" >
+
+							<!-- <p:ajax event="dateSelect" update="atendDialog schedule" listener="#{cadastroAtendimentoBean.dateSelect}"
+								oncomplete="PF('atendDialog').show();" disabled="#{cadastroAtendimentoBean.diaAtivo}"  /> -->
+								
+								
+							<p:ajax event="dateSelect" update="atendDialog" listener="#{cadastroAtendimentoBean.dateSelect}" />
+							<p:ajax event="eventSelect"	listener="#{cadastroAtendimentoBean.eventSelect}" 
+							update="atendDialog" oncomplete="PF('atendDialog').show();" />
+							<p:ajax event="eventMove" listener="#{cadastroAtendimentoBean.eventMove}"
+							update="msgs, schedule, listaHoje"  />
+						</p:schedule>
+					</div>
+				</div>
+			</p:outputPanel>
+
+
+			<p:dialog showEffect="clip" id="atendDialog" widgetVar="atendDialog"
+				modal="true" resizable="true" responsive="true" header="Agendamento">
+				
+				<p:panelGrid id="panelGrid" columns="2" columnClasses="rotulo, campo">
+
+					<p:outputLabel value="Status" for="status" />
+					<p:selectOneMenu id="status"
+						value="#{cadastroAtendimentoBean.atendimento.status}">
+						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+						<f:selectItems value="#{cadastroAtendimentoBean.status}"
+							var="status" itemValue="#{status}"
+							itemLabel="#{status.descricao}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Tipo Procedimento" for="procedimento" />
+					<p:selectOneMenu id="procedimento"
+						value="#{cadastroAtendimentoBean.atendimento.procedimento}">
+						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+						<f:selectItems value="#{cadastroAtendimentoBean.procedimentos}"
+							itemValue="#{procedimento}" itemLabel="#{procedimento.descricao}"
+							var="procedimento" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Paciente" for="pacienteComplete" />
+					<h:panelGroup>
+						<p:autoComplete
+							value="#{cadastroAtendimentoBean.atendimento.paciente}"
+							id="pacienteComplete"
+							completeMethod="#{cadastroAtendimentoBean.carregaPacientes()}"
+							var="company" itemLabel="#{company.nome}" itemValue="#{company}"
+							forceSelection="true" size="30" />
+						<span />
+						<p:commandButton icon="fa fa-user-plus" title="Novo Paciente" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Médico" for="medico" />
+					<h:panelGroup>
+					
+						<p:selectOneMenu id="medico"
+							value="#{cadastroAtendimentoBean.atendimento.medico}" >
+						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+						<f:selectItems value="#{cadastroAtendimentoBean.medicos}"
+							itemValue="#{med}" itemLabel="#{med.nome}"
+							var="med" />
+						</p:selectOneMenu>
+					
+					
+						<!-- <p:autoComplete
+							value="#{cadastroAtendimentoBean.atendimento.medico}" id="medico"
+							completeMethod="#{cadastroAtendimentoBean.carregaMedicos()}"
+							var="med" itemLabel="#{med.nome}" itemValue="#{med}"
+							forceSelection="true" size="30" /> -->
+						<span />
+					</h:panelGroup>
+
+					<p:outputLabel value="Convênio" for="convenio" />
+					<p:selectOneMenu id="convenio"
+						value="#{cadastroAtendimentoBean.atendimento.convenio}">
+						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+						<f:selectItems value="#{cadastroAtendimentoBean.convenios}"
+							itemValue="#{convenio}" itemLabel="#{convenio.descricao}"
+							var="convenio" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Forma de Pagamento" for="pagamento" />
+					<p:selectOneMenu id="pagamento"
+						value="#{cadastroAtendimentoBean.atendimento.formaPagamento}">
+						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+						<f:selectItems value="#{cadastroAtendimentoBean.pagamentos}"
+							var="pagamento" itemValue="#{pagamento}"
+							itemLabel="#{pagamento.descricao}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Data" for="dataAtendimento" />
+					<p:calendar id="dataAtendimento"
+						value="#{cadastroAtendimentoBean.atendimento.data}"
+						timeZone="GMT-3" pattern="dd/MM/yyyy HH:mm" />
+
+					<p:outputLabel value="Observações" />
+					<p:inputTextarea placeholder="Escreva aqui alguma observação..."
+						style="width:97%" />
+
+				</p:panelGrid>
+				<p:commandButton value="Salvar" style="margin-top:10px"
+					
+					actionListener="#{cadastroAtendimentoBean.salvar}"
+					update="schedule,panelGrid, msgs, listaHoje " >
+					
+				</p:commandButton>
+			</p:dialog>
+</h:form>
+
+		
+	</ui:define>
+</ui:composition>
+
+
+

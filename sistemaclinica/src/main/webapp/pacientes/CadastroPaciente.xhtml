@@ -1,0 +1,129 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">#{cadastroPacienteBean.editando ? 'Edição de Paciente' : 'Novo Paciente'}</ui:define>
+
+	<ui:define name="corpo">
+	
+		<f:metadata>
+			<o:viewParam name="paciente" value="#{cadastroPacienteBean.paciente}" />
+			<f:event listener="#{cadastroPacienteBean.init}" type="preRenderView" />
+		</f:metadata>
+	
+		<h:form id="frmPaciente">
+		<h1>#{cadastroPacienteBean.editando ? 'Edição de Paciente' : 'Novo Paciente'}</h1>
+		
+			<p:messages id="messagesP" autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:button value="Novo" outcome="/pacientes/CadastroPaciente" />
+					<p:commandButton value="Salvar" id="botaoSalvarPac"
+					actionListener="#{cadastroPacienteBean.salvar}" update="@form" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Pesquisa" outcome="/pacientes/PesquisaPacientes" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+
+			<p:panelGrid columns="4" id="painel"
+				style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+
+				<p:outputLabel value="Nome Completo" for="nome" />
+				<p:inputText id="nome" size="40" maxlength="40"
+					value="#{cadastroPacienteBean.paciente.nome}" />
+
+				<p:outputLabel value="CEP" for="cep" />
+				<p:inputText id="cep" size="9" maxlength="9"
+					value="#{cadastroPacienteBean.paciente.cep}" />
+
+				<p:outputLabel value="Nascimento" for="nascimento" />
+				<p:inputText id="nascimento" size="10" maxlength="10"
+					value="#{cadastroPacienteBean.paciente.nascimento}" >
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</p:inputText>
+
+				<p:outputLabel value="Endereço Completo" for="endereco" />
+				<p:inputText id="endereco" size="60" maxlength="60"
+					value="#{cadastroPacienteBean.paciente.endereco}" />
+
+				<p:outputLabel value="Sexo" for="sexo" />
+				<p:selectOneMenu id="sexo" value="#{cadastroPacienteBean.paciente.sexo}">
+					<f:selectItem itemLabel="Selecione o Sexo" itemValue="" />
+					<f:selectItem itemLabel="Feminino" itemValue="Feminino" />
+					<f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Bairro" for="bairro" />
+				<p:inputText id="bairro" size="30" maxlength="30"
+					value="#{cadastroPacienteBean.paciente.bairro}" />
+					
+					<p:outputLabel value="Estado Civil" for="civil" />
+				<p:selectOneMenu id="civil" value="#{cadastroPacienteBean.paciente.estadoCivil}">
+					<f:selectItem itemLabel="Selecione" itemValue="" />
+					<f:selectItem itemLabel="Solteiro" itemValue="Solteiro" />
+					<f:selectItem itemLabel="Casado" itemValue="Casado" />
+					<f:selectItem itemLabel="Divorciado" itemValue="Divorciado" />
+					<f:selectItem itemLabel="Viúvo" itemValue="Viúvo" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Estado" for="estado" />
+				<p:selectOneMenu id="estado"
+					value="#{cadastroPacienteBean.paciente.estado}">
+					<f:selectItem itemLabel="Selecione o Estado" />
+					<f:selectItems value="#{cadastroPacienteBean.estados}" itemValue="#{estado}"
+					 itemLabel="#{estado.nome}" var="estado" />
+					 <p:ajax listener="#{cadastroPacienteBean.carregarCidades}" update="cidade" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel value="RG" for="rg" />
+				<p:inputText id="rg" size="14" maxlength="14"
+					value="#{cadastroPacienteBean.paciente.rg}" />
+
+					<p:outputLabel value="Cidade" for="cidade" />
+				<p:selectOneMenu id="cidade"
+					value="#{cadastroPacienteBean.paciente.cidade}">
+					<f:selectItem itemLabel="Selecione a Cidade" />
+					<f:selectItems value="#{cadastroPacienteBean.cidades}" itemValue="#{cidade}"
+					 itemLabel="#{cidade.nome}" var="cidade" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel value="CPF" for="cpf" />
+				<p:inputText id="cpf" size="14" maxlength="14"
+					value="#{cadastroPacienteBean.paciente.cpf}" />
+
+				<p:outputLabel value="Telefone" for="telefone" />
+				<p:inputText id="telefone" size="14" maxlength="14"
+					value="#{cadastroPacienteBean.paciente.telefone1}" />
+
+				<p:outputLabel value="Email" for="email" />
+				<p:inputText id="email" size="40" maxlength="40"
+					value="#{cadastroPacienteBean.paciente.email}" />
+			</p:panelGrid>
+		</h:form>
+
+
+
+
+	</ui:define>
+</ui:composition>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,75 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">Pesquisa Medicos</ui:define>
+    
+    <ui:define name="corpo">
+    	<h:form id="frmPesquisa">
+    	
+	    	<h1>Pesquisa Médicos</h1>
+	    	<p:messages autoUpdate="true" closable="true" />
+	    	
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+	    			<p:commandButton value="Pesquisar" actionListener="#{pesquisaMedicoBean.filtrar}" update="@form" />
+	    		</p:toolbarGroup>
+	    		<p:toolbarGroup align="right">
+	    			<p:button value="Novo" outcome="/medicos/CadastroMedico" />
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+	    	
+	    	<p:panelGrid columns="2" id="painel" style="width: 100%; margin-top: 20px"
+	    			columnClasses="rotulo, campo">
+	    		<p:outputLabel value="Conselho" for="conselho"/>
+	    		<p:inputText id="conselho" size="20" value="#{pesquisaMedicoBean.filtroConselho}" />
+	    		
+	    		<p:outputLabel value="Nome" for="nome"/>
+	    		<p:inputText id="nome" size="40" value="#{pesquisaMedicoBean.filtroNome}" />
+	    	</p:panelGrid>
+	    	
+	    	<div align="center">
+	    	<p:dataTable id="medicosTable" var="medico" value="#{pesquisaMedicoBean.medicos}"
+	    		style="margin-top: 20px; width:70%;" emptyMessage="Nenhum médico encontrado." rows="20"
+	    		paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+	    		rowKey="#{medico.id}" >
+	    		
+	    		<p:column headerText="Nome">
+	    			<h:outputText value="#{medico.nome}" />
+	    		</p:column>
+	    		
+	    		<p:column headerText="Nº Conselho" style="text-align: center; width: 100px">
+	    			<h:outputText value="#{medico.numeroConselho}" />
+	    		</p:column>
+	    		
+	    		<p:column headerText="Telefone" style="width: 250px; text-align:center;">
+	    			<h:outputText value="#{medico.telefone1}"/>
+	    		</p:column>
+	    		
+	    		<p:column style="width: 100px; text-align: center">
+	    			<p:button icon="ui-icon-pencil" title="Editar" outcome="/medicos/CadastroMedico">
+	    				<f:param name="medico" value="#{medico.id}" />
+	    			</p:button>
+	    			<p:commandButton icon="ui-icon-trash" title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
+	    					process="@this" update=":frmPesquisa:confirmacaoExclusaoDialog">
+	    				<f:setPropertyActionListener target="#{pesquisaMedicoBean.medicoSelecionado}" 
+	    					value="#{medico}" />
+	    			</p:commandButton>
+	    		</p:column>
+	    	</p:dataTable>
+	    	</div>
+	    	
+	    	<p:confirmDialog header="Exclusão de Médico" 
+	    		message="Tem certeza que deseja excluir o médico?"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" />
+	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide()"
+	    			action="#{pesquisaMedicoBean.excluir}" process="@this"
+	    			update=":frmPesquisa:medicosTable" />
+	    	</p:confirmDialog>
+    	</h:form>
+    </ui:define>
+</ui:composition>

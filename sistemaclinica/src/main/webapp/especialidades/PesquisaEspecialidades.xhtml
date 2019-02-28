@@ -1,0 +1,99 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Pesquisa Especialidades</ui:define>
+
+	<ui:define name="corpo">
+
+		<f:metadata>
+			<o:viewParam name="especialidade" />
+			<f:event listener="#{pesquisaEspecialidadeBean.init}" type="preRenderView" />
+		</f:metadata>
+
+		<h:form id="frmEspecialidades">
+			<h1>Pesquisa de Convênios</h1>
+
+			<p:messages id="messagesP" autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:commandButton value="Pesquisar" disabled="true" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:commandButton process="@this" value="Novo"
+						oncomplete="PF('dlgEspecialidade').show()"
+						actionListener="#{pesquisaEspecialidadeBean.novo}"
+						update=":frmEspecialidades:dlgEspecialidade" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="especialidadesTable" var="especialidade"
+				value="#{pesquisaEspecialidadeBean.especialidades}" rowKey="#{especialidade}"
+				style="margin-top: 20px" emptyMessage="Nenhum convênio encontrado."
+				rows="20" paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+
+				<p:column headerText="Código" style="text-align: center; width:5% ">
+					<h:outputText value="#{especialidade.id}" />
+				</p:column>
+
+				<p:column headerText="Descrição" style="text-align: center; ">
+					<h:outputText value="#{especialidade.descricao}" />
+				</p:column>
+
+				<p:column style="width: 100px; text-align: center">
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						oncomplete="PF('dlgEspecialidade').show()" process="@this"
+						update=":frmEspecialidades:dlgEspecialidade">
+						<f:setPropertyActionListener
+							target="#{pesquisaEspecialidadeBean.especialidadeSelecionado}"
+							value="#{especialidade}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						oncomplete="PF('confirmacaoExclusao').show()" process="@this"
+						update=":frmEspecialidades:confirmacaoExclusaoDialog">
+						<f:setPropertyActionListener
+							target="#{pesquisaEspecialidadeBean.especialidadeSelecionado}"
+							value="#{especialidade}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+
+			<p:dialog header="Cadastro de Convênios" widgetVar="dlgEspecialidade"
+				modal="true" width="50%">
+				<p:panelGrid columns="2" id="dlgEspecialidade"
+					style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+
+					<p:outputLabel value="Descrição" for="nomeEspecialidade" />
+					<p:inputText id="nomeEspecialidade" size="40" maxlength="40"
+						value="#{pesquisaEspecialidadeBean.especialidadeSelecionado.descricao}" />
+				</p:panelGrid>
+				
+				<div align="right" style="margin-top: 10px">
+					<p:commandButton update="especialidadesTable" icon="ui-icon-plus"
+						value="Salvar" actionListener="#{pesquisaEspecialidadeBean.salvar}"
+						oncomplete="PF('dlgEspecialidade').hide()" />
+				</div>
+				
+			</p:dialog>
+
+			<p:confirmDialog header="Exclusão de Especialidade"
+				message="Tem certeza que deseja excluir o especialidade #{pesquisaEspecialidadeBean.especialidadeSelecionado.descricao}?"
+				widgetVar="confirmacaoExclusao" id="confirmacaoExclusaoDialog">
+				<p:button value="Não"
+					onclick="PF('confirmacaoExclusao').hide(); return false;" />
+				<p:commandButton value="Sim"
+					oncomplete="PF('confirmacaoExclusao').hide()"
+					action="#{pesquisaEspecialidadeBean.excluir}" process="@this"
+					update=":frmEspecialidades:especialidadesTable" />
+			</p:confirmDialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

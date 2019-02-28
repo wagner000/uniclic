@@ -1,0 +1,163 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">#{cadastroMedicoBean.editando ? 'Edição de Médico' : 'Novo Médico'}</ui:define>
+
+	<ui:define name="corpo">
+
+		<f:metadata>
+			<o:viewParam name="medico" value="#{cadastroMedicoBean.medico}" />
+			<f:event listener="#{cadastroMedicoBean.init}" type="preRenderView" />
+		</f:metadata>
+
+		<h:form id="frmMedico">
+			<h1>#{cadastroMedicoBean.editando ? 'Edição de Médico' : 'Novo Médico'}</h1>
+
+			<p:messages autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:button value="Novo" outcome="/medicos/CadastroMedico" />
+					<p:commandButton value="Salvar" id="botaoSalvar" 
+					actionListener="#{cadastroMedicoBean.salvar}" update="@form" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Pesquisa" outcome="/medicos/PesquisaMedicos" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br/>
+			<p:tabView id="tabView">
+				<p:tab title="Dados Pessoais" >
+					<p:panelGrid columns="2" id="painel" style="width:100%;"
+						columnClasses="rotulo, campo">
+
+						<p:outputLabel value="Nome Completo" for="nome" />
+						<p:inputText id="nome" size="40" maxlength="40"
+							value="#{cadastroMedicoBean.medico.nome}" />
+
+						<p:outputLabel value="Nascimento" for="nascimento" />
+						<p:inputMask id="nascimento" mask="99/99/9999"
+							value="#{cadastroMedicoBean.medico.nascimento}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</p:inputMask>
+
+						<p:outputLabel value="Sexo" for="sexo" />
+						<p:selectOneMenu id="sexo"
+							value="#{cadastroMedicoBean.medico.sexo}">
+							<f:selectItem itemLabel="Selecione o Sexo" itemValue="" />
+							<f:selectItem itemLabel="Feminino" itemValue="Feminino" />
+							<f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="RG" for="rg" />
+						<p:inputText id="rg" size="14" maxlength="14"
+							value="#{cadastroMedicoBean.medico.rg}" />
+
+						<p:outputLabel value="CPF" for="cpf" />
+						<p:inputMask id="cpf" size="14" maxlength="14"
+							mask="999.999.999-99" value="#{cadastroMedicoBean.medico.cpf}" />
+
+						<p:outputLabel value="Numero Conselho" for="conselho" />
+						<p:inputText id="conselho" size="14" maxlength="14"
+							value="#{cadastroMedicoBean.medico.numeroConselho}" />
+
+						<p:outputLabel value="Telefone" for="telefone" />
+						<p:inputMask id="telefone" size="14" maxlength="14"
+							mask="(99)99999-9999"
+							value="#{cadastroMedicoBean.medico.telefone1}" />
+
+
+						<p:outputLabel value="Email" for="email" />
+						<p:inputText id="email" size="40" maxlength="40"
+							value="#{cadastroMedicoBean.medico.email}" />
+					</p:panelGrid>
+				</p:tab>
+
+				<p:tab title="Especialidades Médicas" >
+					<p:commandButton style="margin-top: 20px" icon="ui-icon-search"
+						title="Adicionar Especialidades" value="Buscar" type="button"
+						onclick="PF('dlgEspec').show();" />
+
+					<p:dataTable id="especMedico" var="espec"
+						emptyMessage="Adicione Especialidades"
+						style="margin-top: 10px; width: 50%" rows="10" paginator="true"
+						paginatorAlwaysVisible="false" paginatorPosition="bottom"
+						value="#{cadastroMedicoBean.medico.especialidades}"
+						rowKey="#{espec.id}">
+
+						<p:column headerText="Especialidades">
+							<p:outputLabel value="#{espec.descricao}" />
+						</p:column>
+
+						<p:column style="width: 100px; text-align: center">
+							<p:commandButton icon="ui-icon-trash"
+								action="#{cadastroMedicoBean.retirarEspecialidade}"
+								immediate="true" process="@form" update=":frmMedico:tabView:especMedico">
+								<f:setPropertyActionListener value="#{espec}"
+									target="#{cadastroMedicoBean.especSelected}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</p:tab>
+				
+				<p:tab title="Agenda do Médico" >
+				
+				<p:schedule id="scheduleMedico" value="#{cadastroMedicoBean.scheduleMedico}" resizable="false"
+				view="month" rightHeaderTemplate="" style="padding:10px; width:75%; margin-right: auto; margin-left: auto;"
+						widgetVar="scheduleMed" timeZone="GMT-3" draggable="false" >
+						
+						<p:ajax process="@this" event="dateSelect" update=":frmMedico:tabView:scheduleMedico" listener="#{cadastroMedicoBean.dateSelect}" />
+
+						</p:schedule>
+				</p:tab>
+			</p:tabView>
+
+			<p:dialog header="Especialidades Médicas" widgetVar="dlgEspec"
+				modal="true" width="50%">
+				<h:outputText value="Selecione as especialidades deste médico" />
+
+				<p:dataTable id="especTable" var="especialidade"
+					emptyMessage="Erro ao buscar especialidades."
+					style="margin-top: 10px;" rows="10" paginator="true"
+					paginatorAlwaysVisible="false" paginatorPosition="bottom"
+					value="#{cadastroMedicoBean.especialidades}"
+					selection="#{cadastroMedicoBean.medico.especialidades}"
+					rowKey="#{especialidade.id}">
+
+					<p:column selectionMode="multiple"
+						style="width:16px;text-align:center" />
+
+					<p:column headerText="Descrição" style="text-align: center">
+						<p:outputLabel value="#{especialidade.descricao}" />
+					</p:column>
+				</p:dataTable>
+				<div align="right" style="margin-top: 10px">
+					<p:commandButton process="especTable" update=":frmMedico:tabView:especMedico"
+						icon="ui-icon-plus" value="Adicionar"
+						oncomplete="PF('dlgEspec').hide()" />
+				</div>
+
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

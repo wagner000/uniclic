@@ -1,0 +1,103 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Pesquisa Procedimentos</ui:define>
+
+	<ui:define name="corpo">
+	
+		<f:metadata>
+			<o:viewParam name="procedimento" />
+			<f:event listener="#{pesquisaProcedimentoBean.init}" type="preRenderView" />
+		</f:metadata>
+	
+		<h:form id="frmProcedimentos">
+			<h1>Pesquisa Procedimentos</h1>
+
+			<p:messages id="messagesP" autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:commandButton value="Pesquisar" disabled="true" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:commandButton process="@this" value="Novo" oncomplete="PF('dlgProcedimento').show()"
+					actionListener="#{pesquisaProcedimentoBean.novo}" update=":frmProcedimentos:dlgProcedimento" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="procedimentosTable" var="procedimento"
+				value="#{pesquisaProcedimentoBean.procedimentos}"
+				rowKey="#{procedimento}" style="margin-top: 20px"
+				emptyMessage="Nenhum procedimento encontrado." rows="20"
+				paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+
+				<p:column headerText="Código" style="text-align: center; width:5% ">
+					<h:outputText value="#{procedimento.id}" />
+				</p:column>
+
+				<p:column headerText="Descrição" style="text-align: center; ">
+					<h:outputText value="#{procedimento.descricao}" />
+				</p:column>
+
+				<p:column headerText="Tipo" style="text-align: center; ">
+					<h:outputText value="#{procedimento.tipo}" />
+				</p:column>
+
+				<p:column style="width: 100px; text-align: center">
+					<p:commandButton icon="ui-icon-pencil" title="Editar" oncomplete="PF('dlgProcedimento').show()"
+	    					process="@this" update=":frmProcedimentos:dlgProcedimento" >
+	    				<f:setPropertyActionListener target="#{pesquisaProcedimentoBean.procedimentoSelecionado}" 
+	    					value="#{procedimento}" />
+	    			</p:commandButton>
+					
+					<p:commandButton icon="ui-icon-trash" title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
+	    					process="@this" update=":frmProcedimentos:confirmacaoExclusaoDialog" >
+	    				<f:setPropertyActionListener target="#{pesquisaProcedimentoBean.procedimentoSelecionado}" 
+	    					value="#{procedimento}" />
+	    			</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+
+			<p:dialog header="Cadastro Procedimentos" widgetVar="dlgProcedimento"
+				modal="true" width="50%">
+				<p:panelGrid columns="2" id="dlgProcedimento"
+				style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+
+				<p:outputLabel value="Descrição" for="nomeProcedimento" />
+				<p:inputText id="nomeProcedimento" size="40" maxlength="40"
+					value="#{pesquisaProcedimentoBean.procedimentoSelecionado.descricao}" />
+					
+				<p:outputLabel value="Tipo" for="tipoProcedimento" />
+				<p:selectOneMenu id="tipoProcedimento" value="#{pesquisaProcedimentoBean.procedimentoSelecionado.tipo}">
+					<f:selectItem itemLabel="Selecione" itemValue="" />
+					<f:selectItem itemLabel="Consulta/Atendimento" itemValue="Consulta" />
+					<f:selectItem itemLabel="Exames" itemValue="Exame" />
+				</p:selectOneMenu>
+				</p:panelGrid>
+				
+				<div align="right" style="margin-top: 10px">
+					<p:commandButton update="procedimentosTable"
+						icon="ui-icon-plus" value="Salvar" actionListener="#{pesquisaProcedimentoBean.salvar}"
+						oncomplete="PF('dlgProcedimento').hide()" />
+				</div>
+			</p:dialog>
+
+			<p:confirmDialog header="Exclusão de Procedimento" 
+	    		message="Tem certeza que deseja excluir o procedimento #{pesquisaProcedimentoBean.procedimentoSelecionado.descricao}?"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" />
+	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide()"
+	    			action="#{pesquisaProcedimentoBean.excluir}" process="@this"
+	    			update=":frmProcedimentos:procedimentosTable" />
+	    	</p:confirmDialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
