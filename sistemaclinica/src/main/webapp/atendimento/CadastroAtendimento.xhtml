@@ -84,7 +84,8 @@
 							var="company" itemLabel="#{company.nome}" itemValue="#{company}"
 							forceSelection="true" size="30" />
 						<span />
-						<p:commandButton icon="fa fa-user-plus" title="Novo Paciente" />
+						<p:button icon="fa fa-user-plus" title="Novo Paciente"
+							outcome="/pacientes/CadastroPaciente" />
 					</h:panelGroup>
 
 					<p:outputLabel value="Médico" for="medico" />

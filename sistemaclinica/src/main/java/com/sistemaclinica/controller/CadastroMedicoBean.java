@@ -88,7 +88,7 @@ public class CadastroMedicoBean implements Serializable {
 	public void salvar() {
 		try {
 			this.medico = medicoService.salvar(this.medico);
-			limpar();
+			//limpar();
 			
 			FacesUtil.addInfoMessage("Medico salvo com sucesso!");
 		} catch (Exception ne) {
