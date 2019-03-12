@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/Home.xhtml", "/AcessoNegado.xhtml").authenticated()
 			.antMatchers("/atendimento/**", "/pacientes/**").hasAnyRole("AUXILIARES", "ADMINISTRADORES")
 			.antMatchers("/convenios/**", "/especialidades/**", "/medicos/**", ""
-					+ "/procedimentos/**").hasRole("ADMINISTRADORES")
+					+ "/procedimentos/**", "/usuarios/**").hasRole("ADMINISTRADORES")
 			.and()
 		
 		.formLogin()
