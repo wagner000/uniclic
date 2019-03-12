@@ -40,14 +40,14 @@
 					value="#{cadastroPacienteBean.paciente.nome}" />
 
 				<p:outputLabel value="CEP" for="cep" />
-				<p:inputText id="cep" size="9" maxlength="9"
-					value="#{cadastroPacienteBean.paciente.cep}" />
+				<p:inputMask id="cep" size="9" maxlength="9"
+					value="#{cadastroPacienteBean.paciente.cep}" mask="99999-999" />
 
 				<p:outputLabel value="Nascimento" for="nascimento" />
-				<p:inputText id="nascimento" size="10" maxlength="10"
+				<p:inputMask id="nascimento" size="10" maxlength="10" mask="99/99/9999"
 					value="#{cadastroPacienteBean.paciente.nascimento}" >
 						<f:convertDateTime pattern="dd/MM/yyyy" />
-					</p:inputText>
+					</p:inputMask>
 
 				<p:outputLabel value="Endereço Completo" for="endereco" />
 				<p:inputText id="endereco" size="60" maxlength="60"
@@ -95,11 +95,11 @@
 				</p:selectOneMenu>
 				
 				<p:outputLabel value="CPF" for="cpf" />
-				<p:inputText id="cpf" size="14" maxlength="14"
+				<p:inputMask id="cpf" size="14" maxlength="14" mask="999.999.999-99"
 					value="#{cadastroPacienteBean.paciente.cpf}" />
 
 				<p:outputLabel value="Telefone" for="telefone" />
-				<p:inputText id="telefone" size="14" maxlength="14"
+				<p:inputMask id="telefone" size="14" maxlength="14" mask="(99)99999-9999"
 					value="#{cadastroPacienteBean.paciente.telefone1}" />
 
 				<p:outputLabel value="Email" for="email" />
