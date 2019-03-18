@@ -4,10 +4,7 @@ public enum FormaPagamento {
 
 	DINHEIRO("Dinheiro"), 
 	CARTAO_CREDITO("Cartão de crédito"), 
-	CARTAO_DEBITO("Cartão de débito"), 
-	CHEQUE("Cheque"), 
-	BOLETO_BANCARIO("Boleto bancário"), 
-	DEPOSITO_BANCARIO("Depósito bancário");
+	CARTAO_DEBITO("Cartão de débito");
 	
 	private String descricao;
 	

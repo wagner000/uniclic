@@ -6,8 +6,8 @@ public enum StatusAtendimento {
 	
 	AGENDADO("Agendado"),
 	CONFIRMADO("Confirmado"),
-	AGUARDANDO("Aguardando Atendimento"),
-	NAO_COMPARECEU("Não Compareceu"),
+	//AGUARDANDO("Aguardando Atendimento"), //quando o cliente confirma a consulta, automaticamente ele está aguardando atend.
+	//NAO_COMPARECEU("Não Compareceu"),
 	ATENDIDO("Atendido");
 	
 	private String descricao;

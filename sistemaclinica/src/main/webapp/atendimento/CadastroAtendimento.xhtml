@@ -51,6 +51,13 @@
 				</div>
 			</p:outputPanel>
 
+					<!-- <p:selectOneMenu id="status"
+						value="#{cadastroAtendimentoBean.atendimento.status}">
+						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+						<f:selectItems value="#{cadastroAtendimentoBean.status}"
+							var="status" itemValue="#{status}"
+							itemLabel="#{status.descricao}" />
+					</p:selectOneMenu> -->
 
 			<p:dialog showEffect="clip" id="atendDialog" widgetVar="atendDialog"
 				modal="true" resizable="true" responsive="true" header="Agendamento">
@@ -58,13 +65,10 @@
 				<p:panelGrid id="panelGrid" columns="2" columnClasses="rotulo, campo">
 
 					<p:outputLabel value="Status" for="status" />
-					<p:selectOneMenu id="status"
-						value="#{cadastroAtendimentoBean.atendimento.status}">
-						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-						<f:selectItems value="#{cadastroAtendimentoBean.status}"
-							var="status" itemValue="#{status}"
-							itemLabel="#{status.descricao}" />
-					</p:selectOneMenu>
+					<p:outputLabel id="status" style="font-weight: bold;"
+						value="#{cadastroAtendimentoBean.atendimento.status.descricao}" for="status" />
+					
+					
 
 					<p:outputLabel value="Tipo Procedimento" for="procedimento" />
 					<p:selectOneMenu id="procedimento"
@@ -137,11 +141,18 @@
 
 				</p:panelGrid>
 				<p:commandButton value="Salvar" style="margin-top:10px"
-					
 					actionListener="#{cadastroAtendimentoBean.salvar}"
-					update="schedule,panelGrid, msgs, listaHoje " >
-					
-				</p:commandButton>
+					update="schedule,panelGrid, msgs, listaHoje " />
+				<p:spacer/>
+				<p:commandButton value="Confirmar" rendered="#{cadastroAtendimentoBean.atendimento.confirmado}"
+					style="margin-top:10px; background:green; color: white;text-shadow: none;"
+					actionListener="#{cadastroAtendimentoBean.salvar}"
+					update="schedule,panelGrid, msgs, listaHoje " />
+				<p:spacer/>
+				<p:commandButton value="Excluir" 
+					style="margin-top:10px; background:red; color: white;text-shadow: none;"
+					actionListener="#{cadastroAtendimentoBean.salvar}"
+					update="schedule,panelGrid, msgs, listaHoje " />					
 			</p:dialog>
 </h:form>
 

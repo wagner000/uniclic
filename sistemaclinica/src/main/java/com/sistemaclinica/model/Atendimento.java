@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -22,7 +23,7 @@ public class Atendimento implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
-	private StatusAtendimento status; //agendado / confirmado / aguardando atendimento / não compareceu / atendido
+	private StatusAtendimento status = StatusAtendimento.AGENDADO;
 	private Paciente paciente;
 	private Medico medico;
 	private Convenio convenio;
@@ -117,6 +118,22 @@ public class Atendimento implements Serializable {
 	public void setFormaPagamento(FormaPagamento formaPagamento) {
 		this.formaPagamento = formaPagamento;
 	}
+	
+	
+	@Transient
+	public boolean isAgendado() {
+		return StatusAtendimento.AGENDADO.equals(this.getStatus());
+	}
+	
+	@Transient
+	public boolean isConfirmado() {
+		return StatusAtendimento.CONFIRMADO.equals(this.getStatus());
+	}
+	
+	
+	
+	
+	//====================================
 	@Override
 	public int hashCode() {
 		final int prime = 31;
