@@ -13,11 +13,11 @@
 		</locale-config>
 	</application>
 
-	<!-- <factory>
+	<factory>
 		<exception-handler-factory>
-			com.algaworks.pedidovenda.util.jsf.JsfExceptionHandlerFactory
+			com.sistemaclinica.util.jsf.JsfExceptionHandlerFactory
 		</exception-handler-factory>
-	</factory> -->
+	</factory>
 
 </faces-config>
 

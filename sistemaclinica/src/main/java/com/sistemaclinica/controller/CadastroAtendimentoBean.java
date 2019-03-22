@@ -72,11 +72,6 @@ public class CadastroAtendimentoBean implements Serializable {
 			//medicos = medicoDao.medicosHoje();
 			medicos = new ArrayList<Medico>();
 			
-			System.out.println("**MEDICOS**");
-			for(Medico m : medicos) {
-				System.out.println(m.getNome());
-			}
-			
 			carregarListaHoje();
 			carregarSchedule();
 		}
@@ -109,7 +104,7 @@ public class CadastroAtendimentoBean implements Serializable {
 	public void dateSelect(SelectEvent evento) {
 		atendimento = new Atendimento();
 		atendimento.setData((Date)evento.getObject());
-		Date hoje = new Date();
+		//Date hoje = new Date();
 		medicos = medicoDao.medicosNoDia(atendimento.getData());
 		RequestContext.getCurrentInstance().execute("PF('atendDialog').show();");
 		
@@ -119,7 +114,6 @@ public class CadastroAtendimentoBean implements Serializable {
 	}
 	
 	public void eventSelect(SelectEvent selectEvent) {
-		
 		
 		//limparForm();
 		DefaultScheduleEvent event = (DefaultScheduleEvent) selectEvent.getObject();
@@ -162,12 +156,15 @@ public class CadastroAtendimentoBean implements Serializable {
 			FacesUtil.addInfoMessage("Agendamento salvo.");
 			RequestContext.getCurrentInstance().execute("PF('atendDialog').hide();");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			
+			e.printStackTrace();
 		}
 		
 	}
 	
+	public void cancelarAtendimento() {
+		this.atendimento = atendimentoDAO.cancelar(this.atendimento);
+		this.salvar();
+	}
 	
 	public void limparForm() {
 		

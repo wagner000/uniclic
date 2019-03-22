@@ -130,8 +130,15 @@ public class Atendimento implements Serializable {
 		return StatusAtendimento.CONFIRMADO.equals(this.getStatus());
 	}
 	
+	@Transient
+	public boolean isCancelado() {
+		return StatusAtendimento.CANCELADO.equals(this.getStatus());
+	}
 	
-	
+	@Transient
+	public boolean isFinalizado() {
+		return StatusAtendimento.CONFIRMADO.equals(this.getStatus());
+	}
 	
 	//====================================
 	@Override
