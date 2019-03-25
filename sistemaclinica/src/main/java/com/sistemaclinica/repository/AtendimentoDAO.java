@@ -12,8 +12,8 @@ import javax.persistence.Query;
 
 import com.sistemaclinica.model.Atendimento;
 import com.sistemaclinica.model.StatusAtendimento;
-import com.sistemaclinica.service.NegocioException;
 import com.sistemaclinica.util.jpa.Transacional;
+import com.sistemaclinica.util.jsf.NegocioException;
 
 public class AtendimentoDAO implements Serializable {
 
@@ -51,8 +51,7 @@ public class AtendimentoDAO implements Serializable {
 	}
 	
 	@Transacional
-	public Atendimento cancelar(Atendimento atendimento) {
-		try {
+	public Atendimento cancelar(Atendimento atendimento){
 			if(atendimento.isCancelado()) {
 				throw new NegocioException("Este atendimento já está Cancelado!");
 			}
@@ -63,11 +62,7 @@ public class AtendimentoDAO implements Serializable {
 			atendimento.setStatus(StatusAtendimento.CANCELADO);
 			atendimento = this.salvar(atendimento);
 			return atendimento;
-		} catch (NegocioException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return atendimento;
-		}
+		
 	}
 
 	public List<Atendimento> todos() {

@@ -163,7 +163,7 @@ public class CadastroAtendimentoBean implements Serializable {
 	
 	public void cancelarAtendimento() {
 		this.atendimento = atendimentoDAO.cancelar(this.atendimento);
-		this.salvar();
+		//this.salvar();
 	}
 	
 	public void limparForm() {

@@ -6,7 +6,7 @@ public enum StatusAtendimento {
 	CONFIRMADO("Confirmado"),
 	//AGUARDANDO("Aguardando Atendimento"), //quando o cliente confirma a consulta, automaticamente ele está aguardando atend.
 	CANCELADO("Cancelado"),
-	ATENDIDO("Atendido");
+	FINALIZADO("Finalizado");
 	
 	private String descricao;
 	

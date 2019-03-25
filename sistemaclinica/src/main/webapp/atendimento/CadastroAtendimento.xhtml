@@ -63,14 +63,16 @@
 			<p:dialog showEffect="clip" id="atendDialog" widgetVar="atendDialog"
 				modal="true" resizable="true" responsive="true" header="Agendamento">
 				
+				<p:messages id="msg1" closable="true" >
+	    	<p:autoUpdate disabled="false" />
+	    	</p:messages>
+				
 				<p:panelGrid id="panelGrid" columns="2" columnClasses="rotulo, campo">
 
 					<p:outputLabel value="Status" for="status" />
 					<p:outputLabel id="status" style="font-weight: bold;"
 						value="#{cadastroAtendimentoBean.atendimento.status.descricao}" for="status" />
 					
-					
-
 					<p:outputLabel value="Tipo Procedimento" for="procedimento" />
 					<p:selectOneMenu id="procedimento"
 						value="#{cadastroAtendimentoBean.atendimento.procedimento}">
@@ -82,7 +84,7 @@
 
 					<p:outputLabel value="Paciente" for="pacienteComplete" />
 					<h:panelGroup>
-						<p:autoComplete
+						<p:autoComplete readonly="#{not cadastroAtendimentoBean.atendimento.agendado}"
 							value="#{cadastroAtendimentoBean.atendimento.paciente}"
 							id="pacienteComplete"
 							completeMethod="#{cadastroAtendimentoBean.carregaPacientes()}"
@@ -141,16 +143,17 @@
 						style="width:97%" />
 
 				</p:panelGrid>
-				<p:commandButton value="Salvar" style="margin-top:10px"
+				<p:commandButton value="Salvar" 
+					style="margin-top:10px" rendered="#{not cadastroAtendimentoBean.atendimento.finalizado}"
 					actionListener="#{cadastroAtendimentoBean.salvar}"
 					update="schedule,panelGrid, msgs, listaHoje " />
 				<p:spacer/>
-				<p:commandButton value="Confirmar" rendered="#{cadastroAtendimentoBean.atendimento.confirmado}"
+				<p:commandButton value="Confirmar" rendered="#{cadastroAtendimentoBean.atendimento.agendado}"
 					style="margin-top:10px; background:green; color: white;text-shadow: none;"
 					actionListener="#{cadastroAtendimentoBean.salvar}"
 					update="schedule, panelGrid, msgs, listaHoje " />
 				<p:spacer/>
-				<p:commandButton value="Cancelar"
+				<p:commandButton value="Cancelar" rendered="#{not cadastroAtendimentoBean.atendimento.finalizado}"
 					style="margin-top:10px; background:red; color: white;text-shadow: none;"
 					oncomplete="PF('confirmacaoExclusao').show()" process="@this"
 						update=":frmAtendimento:confirmacaoExclusaoDialog" />				
@@ -163,9 +166,9 @@
 				<p:button value="Não"
 					onclick="PF('confirmacaoExclusao').hide(); return false;" />
 				<p:commandButton value="Sim"
-					oncomplete="PF('confirmacaoExclusao').hide()"
-					action="#{cadastroAtendimentoBean.cancelarAtendimento}" process="@this"
-					update=":frmAtendimento:msgs, :frmAtendimento:schedule, :frmAtendimento:panelGrid" />
+					onsuccess="PF('confirmacaoExclusao').hide();"
+					action="#{cadastroAtendimentoBean.cancelarAtendimento}"
+					update=":frmAtendimento:msgs, :frmAtendimento:panelGrid, :frmAtendimento:atendDialog" />
 			</p:confirmDialog>
 			
 </h:form>

@@ -122,7 +122,7 @@ public class Atendimento implements Serializable {
 	
 	@Transient
 	public boolean isAgendado() {
-		return StatusAtendimento.AGENDADO.equals(this.getStatus());
+		return ( StatusAtendimento.AGENDADO.equals(this.getStatus()) && this.getId()!=null );
 	}
 	
 	@Transient
@@ -137,7 +137,17 @@ public class Atendimento implements Serializable {
 	
 	@Transient
 	public boolean isFinalizado() {
-		return StatusAtendimento.CONFIRMADO.equals(this.getStatus());
+		return StatusAtendimento.FINALIZADO.equals(this.getStatus());
+	}
+	
+	@Transient
+	public boolean isCancelavel() {
+		
+		if(this.isAgendado() || this.isConfirmado()) {
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	//====================================

@@ -16,8 +16,8 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 
 import com.sistemaclinica.model.Paciente;
-import com.sistemaclinica.service.NegocioException;
 import com.sistemaclinica.util.jpa.Transacional;
+import com.sistemaclinica.util.jsf.NegocioException;
 
 public class PacienteDAO implements Serializable {
 

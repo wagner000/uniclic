@@ -8,8 +8,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
 import com.sistemaclinica.model.Procedimento;
-import com.sistemaclinica.service.NegocioException;
 import com.sistemaclinica.util.jpa.Transacional;
+import com.sistemaclinica.util.jsf.NegocioException;
 
 public class ProcedimentoDAO implements Serializable {
 
