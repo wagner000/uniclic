@@ -1,12 +1,15 @@
 package com.sistemaclinica.model;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -20,6 +23,8 @@ public class Procedimento implements Serializable {
 	private Long id;
 	private String descricao;
 	private String tipo; //consulta ou exame
+	private List<Medico> medicos;
+	
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -70,6 +75,16 @@ public class Procedimento implements Serializable {
 	}
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	
+	
+	
+	@ManyToMany(mappedBy = "procedimentos", cascade = CascadeType.ALL)
+	public List<Medico> getMedicos() {
+		return medicos;
+	}
+	public void setMedicos(List<Medico> medicos) {
+		this.medicos = medicos;
 	}
 	
 	

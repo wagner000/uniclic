@@ -75,6 +75,7 @@
 					
 					<p:outputLabel value="Tipo Procedimento" for="procedimento" />
 					<p:selectOneMenu id="procedimento"
+						disabled="#{cadastroAtendimentoBean.atendimento.finalizado}"
 						value="#{cadastroAtendimentoBean.atendimento.procedimento}">
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 						<f:selectItems value="#{cadastroAtendimentoBean.procedimentos}"
@@ -84,7 +85,7 @@
 
 					<p:outputLabel value="Paciente" for="pacienteComplete" />
 					<h:panelGroup>
-						<p:autoComplete readonly="#{not cadastroAtendimentoBean.atendimento.agendado}"
+						<p:autoComplete readonly="#{cadastroAtendimentoBean.atendimento.finalizado}"
 							value="#{cadastroAtendimentoBean.atendimento.paciente}"
 							id="pacienteComplete"
 							completeMethod="#{cadastroAtendimentoBean.carregaPacientes()}"
@@ -99,6 +100,7 @@
 					<h:panelGroup>
 					
 						<p:selectOneMenu id="medico"
+							disabled="#{cadastroAtendimentoBean.atendimento.finalizado}"
 							value="#{cadastroAtendimentoBean.atendimento.medico}" >
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 						<f:selectItems value="#{cadastroAtendimentoBean.medicos}"
@@ -117,6 +119,7 @@
 
 					<p:outputLabel value="Convênio" for="convenio" />
 					<p:selectOneMenu id="convenio"
+					disabled="#{cadastroAtendimentoBean.atendimento.finalizado}"
 						value="#{cadastroAtendimentoBean.atendimento.convenio}">
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 						<f:selectItems value="#{cadastroAtendimentoBean.convenios}"
@@ -126,6 +129,7 @@
 
 					<p:outputLabel value="Forma de Pagamento" for="pagamento" />
 					<p:selectOneMenu id="pagamento"
+						disabled="#{cadastroAtendimentoBean.atendimento.finalizado}"
 						value="#{cadastroAtendimentoBean.atendimento.formaPagamento}">
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 						<f:selectItems value="#{cadastroAtendimentoBean.pagamentos}"
@@ -135,11 +139,14 @@
 
 					<p:outputLabel value="Data" for="dataAtendimento" />
 					<p:calendar id="dataAtendimento"
+						disabled="#{cadastroAtendimentoBean.atendimento.finalizado}"
 						value="#{cadastroAtendimentoBean.atendimento.data}"
 						timeZone="GMT-3" pattern="dd/MM/yyyy HH:mm" />
 
 					<p:outputLabel value="Observações" />
-					<p:inputTextarea placeholder="Escreva aqui alguma observação..."
+					<p:inputTextarea 
+						disabled="#{cadastroAtendimentoBean.atendimento.finalizado}"
+						placeholder="Escreva aqui alguma observação..."
 						style="width:97%" />
 
 				</p:panelGrid>
@@ -147,13 +154,9 @@
 					style="margin-top:10px" rendered="#{not cadastroAtendimentoBean.atendimento.finalizado}"
 					actionListener="#{cadastroAtendimentoBean.salvar}"
 					update="schedule,panelGrid, msgs, listaHoje " />
-				<p:spacer/>
-				<p:commandButton value="Confirmar" rendered="#{cadastroAtendimentoBean.atendimento.agendado}"
-					style="margin-top:10px; background:green; color: white;text-shadow: none;"
-					actionListener="#{cadastroAtendimentoBean.salvar}"
-					update="schedule, panelGrid, msgs, listaHoje " />
-				<p:spacer/>
-				<p:commandButton value="Cancelar" rendered="#{not cadastroAtendimentoBean.atendimento.finalizado}"
+				<p:spacer/><p:spacer/>
+				
+				<p:commandButton value="Cancelar" rendered="#{cadastroAtendimentoBean.atendimento.cancelavel}"
 					style="margin-top:10px; background:red; color: white;text-shadow: none;"
 					oncomplete="PF('confirmacaoExclusao').show()" process="@this"
 						update=":frmAtendimento:confirmacaoExclusaoDialog" />				
@@ -170,7 +173,6 @@
 					action="#{cadastroAtendimentoBean.cancelarAtendimento}"
 					update=":frmAtendimento:msgs, :frmAtendimento:panelGrid, :frmAtendimento:atendDialog" />
 			</p:confirmDialog>
-			
 </h:form>
 
 		

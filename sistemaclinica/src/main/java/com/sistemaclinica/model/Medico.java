@@ -48,6 +48,7 @@ public class Medico implements Serializable {
 	
 	private List<Especialidade> especialidades;
 	private List<AgendaMedico> agenda;
+	private List<Procedimento> procedimentos;
 	
 	
 	@Id
@@ -185,6 +186,17 @@ public class Medico implements Serializable {
 	}
 	public void setAgenda(List<AgendaMedico> agenda) {
 		this.agenda = agenda;
+	}
+	
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "medico_has_procedimentos", joinColumns = @JoinColumn(name = "id_medico"),
+				inverseJoinColumns = @JoinColumn(name = "id_procedimento"))
+	public List<Procedimento> getProcedimentos() {
+		return procedimentos;
+	}
+	public void setProcedimentos(List<Procedimento> procedimentos) {
+		this.procedimentos = procedimentos;
 	}
 	
 	

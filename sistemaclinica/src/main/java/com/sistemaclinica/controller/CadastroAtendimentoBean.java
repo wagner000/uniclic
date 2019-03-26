@@ -33,6 +33,7 @@ import com.sistemaclinica.repository.MedicoDAO;
 import com.sistemaclinica.repository.PacienteDAO;
 import com.sistemaclinica.repository.ProcedimentoDAO;
 import com.sistemaclinica.util.jsf.FacesUtil;
+import com.sistemaclinica.util.jsf.NegocioException;
 
 @Named
 @ViewScoped
@@ -130,21 +131,26 @@ public class CadastroAtendimentoBean implements Serializable {
 		}
 	}
 	
-	
-	//fazer teste se o medico atende no novo dia
+	//-------
+	//TODO fazer teste se o medico atende no novo dia
+	//-----------
 	public void eventMove(ScheduleEntryMoveEvent scheduleEntryMoveEvent){
 		Atendimento a = atendimentoDAO.porId((Long) scheduleEntryMoveEvent.getScheduleEvent().getData());
 		
-		java.util.Calendar newCal = new GregorianCalendar();
-		newCal.setTime(a.getData());
-		newCal.add(Calendar.DATE, (scheduleEntryMoveEvent.getDayDelta()));
-		newCal.add(Calendar.MINUTE, (scheduleEntryMoveEvent.getMinuteDelta()));
-		a.setData(newCal.getTime());
-		
-		atendimentoDAO.salvar(a);
-		carregarSchedule();
-		carregarListaHoje();
-		FacesUtil.addInfoMessage("Agendamento atualizado.");
+		if(StatusAtendimento.FINALIZADO.equals(a.getStatus())) {
+			throw new NegocioException("Atendimento já Finalizado!");
+		}else {
+			java.util.Calendar newCal = new GregorianCalendar();
+			newCal.setTime(a.getData());
+			newCal.add(Calendar.DATE, (scheduleEntryMoveEvent.getDayDelta()));
+			newCal.add(Calendar.MINUTE, (scheduleEntryMoveEvent.getMinuteDelta()));
+			a.setData(newCal.getTime());
+			
+			atendimentoDAO.salvar(a);
+			carregarSchedule();
+			carregarListaHoje();
+			FacesUtil.addInfoMessage("Agendamento atualizado.");
+		}
 	 }
 	
 	public void salvar() {
