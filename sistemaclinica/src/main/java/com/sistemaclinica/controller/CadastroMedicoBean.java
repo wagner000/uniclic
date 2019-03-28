@@ -1,6 +1,7 @@
 package com.sistemaclinica.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,11 @@ import org.primefaces.model.ScheduleModel;
 import com.sistemaclinica.model.AgendaMedico;
 import com.sistemaclinica.model.Especialidade;
 import com.sistemaclinica.model.Medico;
+import com.sistemaclinica.model.Procedimento;
+import com.sistemaclinica.model.ProcedimentoValor;
 import com.sistemaclinica.repository.EspecialidadeDAO;
+import com.sistemaclinica.repository.ProcedimentoDAO;
+import com.sistemaclinica.repository.ProcedimentoValorDAO;
 import com.sistemaclinica.service.CadastroMedicoService;
 import com.sistemaclinica.util.jsf.FacesUtil;
 
@@ -27,13 +32,23 @@ public class CadastroMedicoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Medico medico;
-	private Especialidade especSelected;
-	private List<Especialidade> especialidades;
-	@Inject
-	private EspecialidadeDAO especialidadeRepositoy;
+	//private Especialidade especSelected;
+	//private List<Especialidade> especialidades;
+	//@Inject
+	//private EspecialidadeDAO especialidadeRepositoy;
 	
 	@Inject
 	private CadastroMedicoService medicoService;
+	
+	@Inject
+	private ProcedimentoDAO procedimentoDAO;
+	private List<Procedimento> procedimentos;
+	private List<Procedimento> proSelecionados;
+	
+	@Inject
+	private ProcedimentoValorDAO proValorDAO;
+	private List<ProcedimentoValor> proValors;
+	private ProcedimentoValor procSelected;
 	
 	private ScheduleModel scheduleMedico;
 	
@@ -43,7 +58,10 @@ public class CadastroMedicoBean implements Serializable {
 	
 	public void init() {
 		if(FacesUtil.isNotPostback()) {
-			especialidades = especialidadeRepositoy.todas();
+			//especialidades = especialidadeRepositoy.todas();
+			procedimentos = procedimentoDAO.todos();
+			proSelecionados = new ArrayList<Procedimento>();
+			
 			scheduleMedico = new DefaultScheduleModel();
 			carregarSchedule();
 		}
@@ -96,11 +114,27 @@ public class CadastroMedicoBean implements Serializable {
 		}
 	}
 	
-	public void retirarEspecialidade() {
+	/*
+	 * public void retirarEspecialidade() {
+	 * 
+	 * System.out.println("*** "+especSelected.getDescricao());
+	 * medico.getEspecialidades().remove(especSelected);
+	 * 
+	 * }
+	 */
+	
+	public void adicionarProcedimentos() {
+		for(Procedimento p : proSelecionados) {
+			ProcedimentoValor proValor = new ProcedimentoValor();
+			proValor.setMedico(medico);
+			proValor.setProcedimento(p);
+			medico.getProcedimentos().add(proValor);
+		}
+	}
+	
+	public void retirarProcedimento() {
 		
-			System.out.println("*** "+especSelected.getDescricao());
-			medico.getEspecialidades().remove(especSelected);
-		
+		medico.getProcedimentos().remove(procSelected);
 	}
 	
 	
@@ -119,24 +153,9 @@ public class CadastroMedicoBean implements Serializable {
 	public Medico getMedico() {
 		return medico;
 	}
-	public List<Especialidade> getEspecialidades(){
-		return especialidades;
-	}
-
-	public Especialidade getEspecSelected() {
-		return especSelected;
-	}
-
-	public void setEspecSelected(Especialidade especSelected) {
-		this.especSelected = especSelected;
-	}
 
 	public void setMedico(Medico medico) {
 		this.medico = medico;
-	}
-
-	public void setEspecialidades(List<Especialidade> especialidades) {
-		this.especialidades = especialidades;
 	}
 
 	public ScheduleModel getScheduleMedico() {
@@ -145,6 +164,38 @@ public class CadastroMedicoBean implements Serializable {
 
 	public void setScheduleMedico(ScheduleModel scheduleMedico) {
 		this.scheduleMedico = scheduleMedico;
+	}
+
+	public List<Procedimento> getProcedimentos() {
+		return procedimentos;
+	}
+
+	public void setProcedimentos(List<Procedimento> procedimentos) {
+		this.procedimentos = procedimentos;
+	}
+
+	public List<ProcedimentoValor> getProValors() {
+		return proValors;
+	}
+
+	public void setProValors(List<ProcedimentoValor> proValors) {
+		this.proValors = proValors;
+	}
+
+	public List<Procedimento> getProSelecionados() {
+		return proSelecionados;
+	}
+
+	public void setProSelecionados(List<Procedimento> proSelecionados) {
+		this.proSelecionados = proSelecionados;
+	}
+
+	public ProcedimentoValor getProcSelected() {
+		return procSelected;
+	}
+
+	public void setProcSelected(ProcedimentoValor procSelected) {
+		this.procSelected = procSelected;
 	}
 	
 	

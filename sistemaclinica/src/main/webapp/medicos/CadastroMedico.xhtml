@@ -79,7 +79,87 @@
 					</p:panelGrid>
 				</p:tab>
 
-				<p:tab title="Especialidades Médicas" >
+				
+				
+				
+				<p:tab title="Procedimentos" >
+					<p:commandButton style="margin-top: 20px" icon="ui-icon-search"
+						title="Adicionar Procedimentos" value="Buscar" type="button"
+						onclick="PF('dlgProcedimento').show();" />
+
+					<p:dataTable id="procValores" var="proc"
+						emptyMessage="Selecione os Procedimentos e Valores"
+						style="margin-top: 10px; width: 50%" rows="10" paginator="true"
+						paginatorAlwaysVisible="false" paginatorPosition="bottom"
+						value="#{cadastroMedicoBean.medico.procedimentos}"
+						rowKey="#{proc.id}">
+
+						<p:column style="text-align: center"
+						 headerText="Procedimentos">
+							<p:outputLabel value="#{proc.procedimento.descricao}" />
+						</p:column>
+
+						<p:column style="width: 100px; text-align: center">
+							<p:commandButton icon="ui-icon-trash"
+								action="#{cadastroMedicoBean.retirarProcedimento}"
+								immediate="true" process="@form" update=":frmMedico:tabView:procValores">
+								<f:setPropertyActionListener value="#{proc}"
+									target="#{cadastroMedicoBean.procSelected}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</p:tab>
+				
+				
+				<p:tab title="Agenda do Médico" >
+				
+				<p:schedule id="scheduleMedico" value="#{cadastroMedicoBean.scheduleMedico}" resizable="false"
+				view="month" rightHeaderTemplate="" style="padding:10px; width:75%; margin-right: auto; margin-left: auto;"
+						widgetVar="scheduleMed" timeZone="GMT-3" draggable="false" >
+						
+						<p:ajax process="@this" event="dateSelect" update=":frmMedico:tabView:scheduleMedico" listener="#{cadastroMedicoBean.dateSelect}" />
+
+						</p:schedule>
+				</p:tab>
+			</p:tabView>
+			
+			<p:dialog header="Procedimentos" widgetVar="dlgProcedimento"
+				modal="true" width="50%">
+				<h:outputText value="Selecione os procedimentos deste médico" />
+
+				<p:dataTable id="procTable" var="procedimento"
+					emptyMessage="Erro ao buscar procedimentos."
+					style="margin-top: 10px;" rows="10" paginator="true"
+					paginatorAlwaysVisible="false" paginatorPosition="bottom"
+					value="#{cadastroMedicoBean.procedimentos}"
+					selection="#{cadastroMedicoBean.proSelecionados}"
+					rowKey="#{procedimento.id}">
+
+					<p:column selectionMode="multiple"
+						style="width:16px;text-align:center" />
+
+					<p:column headerText="Descrição" style="text-align: center">
+						<p:outputLabel value="#{procedimento.descricao}" />
+					</p:column>
+				</p:dataTable>
+				<div align="right" style="margin-top: 10px">
+					<p:commandButton process="procTable" update=":frmMedico:tabView:procValores"
+						icon="ui-icon-plus" value="Adicionar"
+						action="#{cadastroMedicoBean.adicionarProcedimentos}"
+						oncomplete="PF('dlgProcedimento').hide()" />
+				</div>
+
+			</p:dialog>
+
+			
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+
+
+
+<!-- <p:tab title="Especialidades Médicas" >
 					<p:commandButton style="margin-top: 20px" icon="ui-icon-search"
 						title="Adicionar Especialidades" value="Buscar" type="button"
 						onclick="PF('dlgEspec').show();" />
@@ -105,21 +185,12 @@
 							</p:commandButton>
 						</p:column>
 					</p:dataTable>
-				</p:tab>
-				
-				<p:tab title="Agenda do Médico" >
-				
-				<p:schedule id="scheduleMedico" value="#{cadastroMedicoBean.scheduleMedico}" resizable="false"
-				view="month" rightHeaderTemplate="" style="padding:10px; width:75%; margin-right: auto; margin-left: auto;"
-						widgetVar="scheduleMed" timeZone="GMT-3" draggable="false" >
-						
-						<p:ajax process="@this" event="dateSelect" update=":frmMedico:tabView:scheduleMedico" listener="#{cadastroMedicoBean.dateSelect}" />
+				</p:tab> -->
 
-						</p:schedule>
-				</p:tab>
-			</p:tabView>
 
-			<p:dialog header="Especialidades Médicas" widgetVar="dlgEspec"
+
+
+<!-- <p:dialog header="Especialidades Médicas" widgetVar="dlgEspec"
 				modal="true" width="50%">
 				<h:outputText value="Selecione as especialidades deste médico" />
 
@@ -144,20 +215,7 @@
 						oncomplete="PF('dlgEspec').hide()" />
 				</div>
 
-			</p:dialog>
-		</h:form>
-	</ui:define>
-</ui:composition>
-
-
-
-
-
-
-
-
-
-
+			</p:dialog> -->
 
 
 
