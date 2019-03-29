@@ -32,10 +32,11 @@ public class CadastroMedicoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Medico medico;
-	//private Especialidade especSelected;
-	//private List<Especialidade> especialidades;
-	//@Inject
-	//private EspecialidadeDAO especialidadeRepositoy;
+	private Especialidade especSelected;
+	private List<Especialidade> especialidades;
+	
+	@Inject
+	private EspecialidadeDAO especialidadeRepositoy;
 	
 	@Inject
 	private CadastroMedicoService medicoService;
@@ -58,7 +59,7 @@ public class CadastroMedicoBean implements Serializable {
 	
 	public void init() {
 		if(FacesUtil.isNotPostback()) {
-			//especialidades = especialidadeRepositoy.todas();
+			especialidades = especialidadeRepositoy.todas();
 			procedimentos = procedimentoDAO.todos();
 			proSelecionados = new ArrayList<Procedimento>();
 			
@@ -114,14 +115,12 @@ public class CadastroMedicoBean implements Serializable {
 		}
 	}
 	
-	/*
-	 * public void retirarEspecialidade() {
-	 * 
-	 * System.out.println("*** "+especSelected.getDescricao());
-	 * medico.getEspecialidades().remove(especSelected);
-	 * 
-	 * }
-	 */
+	
+	  public void retirarEspecialidade() {
+	  
+	  medico.getEspecialidades().remove(especSelected);
+	  }
+	 
 	
 	public void adicionarProcedimentos() {
 		for(Procedimento p : proSelecionados) {
@@ -196,6 +195,22 @@ public class CadastroMedicoBean implements Serializable {
 
 	public void setProcSelected(ProcedimentoValor procSelected) {
 		this.procSelected = procSelected;
+	}
+
+	public Especialidade getEspecSelected() {
+		return especSelected;
+	}
+
+	public void setEspecSelected(Especialidade especSelected) {
+		this.especSelected = especSelected;
+	}
+
+	public List<Especialidade> getEspecialidades() {
+		return especialidades;
+	}
+
+	public void setEspecialidades(List<Especialidade> especialidades) {
+		this.especialidades = especialidades;
 	}
 	
 	

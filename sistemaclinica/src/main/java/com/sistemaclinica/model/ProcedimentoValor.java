@@ -40,19 +40,19 @@ public class ProcedimentoValor implements Serializable {
 	}
 	
 	
+	@ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="id_procedimento")
 	public Procedimento getProcedimento() {
 		return procedimento;
 	}
 
 	
-	@ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="procedimento_id")
 	public void setProcedimento(Procedimento procedimento) {
 		this.procedimento = procedimento;
 	}
 
 	@ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="medico_id")
+    @JoinColumn(name="id_medico")
 	public Medico getMedico() {
 		return medico;
 	}

@@ -3,8 +3,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:o="http://omnifaces.org/ui">
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
 
 	<ui:define name="titulo">#{cadastroMedicoBean.editando ? 'Edição de Médico' : 'Novo Médico'}</ui:define>
 
@@ -16,24 +15,25 @@
 		</f:metadata>
 
 		<h:form id="frmMedico">
-			<h1>#{cadastroMedicoBean.editando ? 'Edição de Médico' : 'Novo Médico'}</h1>
+			<h1>#{cadastroMedicoBean.editando ? 'Edição de Médico' : 'Novo
+				Médico'}</h1>
 
 			<p:messages autoUpdate="true" closable="true" />
 
 			<p:toolbar style="margin-top: 20px">
 				<p:toolbarGroup>
 					<p:button value="Novo" outcome="/medicos/CadastroMedico" />
-					<p:commandButton value="Salvar" id="botaoSalvar" 
-					actionListener="#{cadastroMedicoBean.salvar}" update="@form" />
+					<p:commandButton value="Salvar" id="botaoSalvar"
+						actionListener="#{cadastroMedicoBean.salvar}" update="@form" />
 				</p:toolbarGroup>
 				<p:toolbarGroup align="right">
 					<p:button value="Pesquisa" outcome="/medicos/PesquisaMedicos" />
 				</p:toolbarGroup>
 			</p:toolbar>
 
-			<br/>
+			<br />
 			<p:tabView id="tabView">
-				<p:tab title="Dados Pessoais" >
+				<p:tab title="Dados Pessoais">
 					<p:panelGrid columns="2" id="painel" style="width:100%;"
 						columnClasses="rotulo, campo">
 
@@ -79,87 +79,7 @@
 					</p:panelGrid>
 				</p:tab>
 
-				
-				
-				
-				<p:tab title="Procedimentos" >
-					<p:commandButton style="margin-top: 20px" icon="ui-icon-search"
-						title="Adicionar Procedimentos" value="Buscar" type="button"
-						onclick="PF('dlgProcedimento').show();" />
-
-					<p:dataTable id="procValores" var="proc"
-						emptyMessage="Selecione os Procedimentos e Valores"
-						style="margin-top: 10px; width: 50%" rows="10" paginator="true"
-						paginatorAlwaysVisible="false" paginatorPosition="bottom"
-						value="#{cadastroMedicoBean.medico.procedimentos}"
-						rowKey="#{proc.id}">
-
-						<p:column style="text-align: center"
-						 headerText="Procedimentos">
-							<p:outputLabel value="#{proc.procedimento.descricao}" />
-						</p:column>
-
-						<p:column style="width: 100px; text-align: center">
-							<p:commandButton icon="ui-icon-trash"
-								action="#{cadastroMedicoBean.retirarProcedimento}"
-								immediate="true" process="@form" update=":frmMedico:tabView:procValores">
-								<f:setPropertyActionListener value="#{proc}"
-									target="#{cadastroMedicoBean.procSelected}" />
-							</p:commandButton>
-						</p:column>
-					</p:dataTable>
-				</p:tab>
-				
-				
-				<p:tab title="Agenda do Médico" >
-				
-				<p:schedule id="scheduleMedico" value="#{cadastroMedicoBean.scheduleMedico}" resizable="false"
-				view="month" rightHeaderTemplate="" style="padding:10px; width:75%; margin-right: auto; margin-left: auto;"
-						widgetVar="scheduleMed" timeZone="GMT-3" draggable="false" >
-						
-						<p:ajax process="@this" event="dateSelect" update=":frmMedico:tabView:scheduleMedico" listener="#{cadastroMedicoBean.dateSelect}" />
-
-						</p:schedule>
-				</p:tab>
-			</p:tabView>
-			
-			<p:dialog header="Procedimentos" widgetVar="dlgProcedimento"
-				modal="true" width="50%">
-				<h:outputText value="Selecione os procedimentos deste médico" />
-
-				<p:dataTable id="procTable" var="procedimento"
-					emptyMessage="Erro ao buscar procedimentos."
-					style="margin-top: 10px;" rows="10" paginator="true"
-					paginatorAlwaysVisible="false" paginatorPosition="bottom"
-					value="#{cadastroMedicoBean.procedimentos}"
-					selection="#{cadastroMedicoBean.proSelecionados}"
-					rowKey="#{procedimento.id}">
-
-					<p:column selectionMode="multiple"
-						style="width:16px;text-align:center" />
-
-					<p:column headerText="Descrição" style="text-align: center">
-						<p:outputLabel value="#{procedimento.descricao}" />
-					</p:column>
-				</p:dataTable>
-				<div align="right" style="margin-top: 10px">
-					<p:commandButton process="procTable" update=":frmMedico:tabView:procValores"
-						icon="ui-icon-plus" value="Adicionar"
-						action="#{cadastroMedicoBean.adicionarProcedimentos}"
-						oncomplete="PF('dlgProcedimento').hide()" />
-				</div>
-
-			</p:dialog>
-
-			
-		</h:form>
-	</ui:define>
-</ui:composition>
-
-
-
-
-<!-- <p:tab title="Especialidades Médicas" >
+				<p:tab title="Especialidades Médicas">
 					<p:commandButton style="margin-top: 20px" icon="ui-icon-search"
 						title="Adicionar Especialidades" value="Buscar" type="button"
 						onclick="PF('dlgEspec').show();" />
@@ -171,26 +91,75 @@
 						value="#{cadastroMedicoBean.medico.especialidades}"
 						rowKey="#{espec.id}">
 
-						<p:column style="text-align: center"
-						 headerText="Especialidades">
+						<p:column style="text-align: center" headerText="Especialidades">
 							<p:outputLabel value="#{espec.descricao}" />
 						</p:column>
 
 						<p:column style="width: 100px; text-align: center">
 							<p:commandButton icon="ui-icon-trash"
 								action="#{cadastroMedicoBean.retirarEspecialidade}"
-								immediate="true" process="@form" update=":frmMedico:tabView:especMedico">
+								immediate="true" process="@form"
+								update=":frmMedico:tabView:especMedico">
 								<f:setPropertyActionListener value="#{espec}"
 									target="#{cadastroMedicoBean.especSelected}" />
 							</p:commandButton>
 						</p:column>
 					</p:dataTable>
-				</p:tab> -->
+				</p:tab>
+				
+				<p:tab title="Procedimentos">
+					<p:commandButton style="margin-top: 20px" icon="ui-icon-search"
+						title="Procedimentos realizados" value="Buscar" type="button"
+						onclick="PF('dlgProc').show();" />
+
+					<p:dataTable id="procMedico" var="proc"
+						emptyMessage="Adicione Procedimentos"
+						style="margin-top: 10px; width: 50%" rows="10" paginator="true"
+						paginatorAlwaysVisible="false" paginatorPosition="bottom"
+						value="#{cadastroMedicoBean.medico.procedimentos}"
+						rowKey="#{proc.id}">
+
+						<p:column style="text-align: center" headerText="Procedimentos">
+							<p:outputLabel value="#{proc.procedimento.descricao}" />
+						</p:column>
+						
+						<p:column style="text-align: center" headerText="Valor (%)">
+							<p:inputNumber value="#{proc.valor}" />
+						</p:column>
+
+						<p:column style="width: 100px; text-align: center" headerText="Excluir">
+							<p:commandButton icon="ui-icon-trash"
+								action="#{cadastroMedicoBean.retirarProcedimento}"
+								immediate="true" process="@form"
+								update=":frmMedico:tabView:procMedico">
+								<f:setPropertyActionListener value="#{proc}"
+									target="#{cadastroMedicoBean.procSelected}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</p:tab>
+
+
+				<p:tab title="Agenda do Médico">
+
+					<p:schedule id="scheduleMedico"
+						value="#{cadastroMedicoBean.scheduleMedico}" resizable="false"
+						view="month" rightHeaderTemplate=""
+						style="padding:10px; width:75%; margin-right: auto; margin-left: auto;"
+						widgetVar="scheduleMed" timeZone="GMT-3" draggable="false">
+
+						<p:ajax process="@this" event="dateSelect"
+							update=":frmMedico:tabView:scheduleMedico"
+							listener="#{cadastroMedicoBean.dateSelect}" />
+
+					</p:schedule>
+				</p:tab>
+			</p:tabView>
 
 
 
 
-<!-- <p:dialog header="Especialidades Médicas" widgetVar="dlgEspec"
+			<p:dialog header="Especialidades Médicas" widgetVar="dlgEspec"
 				modal="true" width="50%">
 				<h:outputText value="Selecione as especialidades deste médico" />
 
@@ -210,12 +179,53 @@
 					</p:column>
 				</p:dataTable>
 				<div align="right" style="margin-top: 10px">
-					<p:commandButton process="especTable" update=":frmMedico:tabView:especMedico"
-						icon="ui-icon-plus" value="Adicionar"
-						oncomplete="PF('dlgEspec').hide()" />
+					<p:commandButton process="especTable"
+						update=":frmMedico:tabView:especMedico" icon="ui-icon-plus"
+						value="Adicionar" oncomplete="PF('dlgEspec').hide()" />
 				</div>
+			</p:dialog>
+			
+			
+			<p:dialog header="Procedimentos Médicos" widgetVar="dlgProc"
+				modal="true" width="50%">
+				<h:outputText value="Selecione os procedimentos deste médico" />
 
-			</p:dialog> -->
+				<p:dataTable id="procTable" var="procs"
+					emptyMessage="Erro ao buscar procedimentos."
+					style="margin-top: 10px;" rows="10" paginator="true"
+					paginatorAlwaysVisible="false" paginatorPosition="bottom"
+					value="#{cadastroMedicoBean.procedimentos}"
+					selection="#{cadastroMedicoBean.proSelecionados}"
+					rowKey="#{procs.id}">
+
+					<p:column selectionMode="multiple"
+						style="width:16px;text-align:center" />
+
+					<p:column headerText="Descrição" style="text-align: center">
+						<p:outputLabel value="#{procs.descricao}" />
+					</p:column>
+				</p:dataTable>
+				<div align="right" style="margin-top: 10px">
+					<p:commandButton
+						value="Adicionar"
+						update=":frmMedico:tabView:procMedico" icon="ui-icon-plus"
+						action="#{cadastroMedicoBean.adicionarProcedimentos}"
+						onsuccess="PF('dlgProc').hide()" />
+				</div>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+
+
+
+
+
+
+
+
 
 
 

@@ -51,6 +51,14 @@ public class Medico implements Serializable {
 	private List<ProcedimentoValor> procedimentos;
 	
 	
+	public Medico() {
+		
+		especialidades = new ArrayList<Especialidade>();
+		agenda = new ArrayList<AgendaMedico>();
+		procedimentos = new ArrayList<ProcedimentoValor>();
+		
+	}
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id_medico")
