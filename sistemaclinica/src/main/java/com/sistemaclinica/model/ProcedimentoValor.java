@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="procedimento_valor")
+@Table(name="procedimento_medico_valor")
 public class ProcedimentoValor implements Serializable {
 
 	private static final long serialVersionUID = 1L;

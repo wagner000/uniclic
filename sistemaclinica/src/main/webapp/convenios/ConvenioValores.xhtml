@@ -1,0 +1,105 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">#{cadastroMedicoBean.editando ? 'Edição de Médico' : 'Novo Médico'}</ui:define>
+
+	<ui:define name="corpo">
+
+		<f:metadata>
+			<o:viewParam name="conId"
+				value="#{cadastroConvenioValorBean.convenio}" />
+			<f:event listener="#{cadastroConvenioValorBean.init}"
+				type="preRenderView" />
+		</f:metadata>
+
+		<h:form id="frmConvenioValor">
+
+			<p:messages autoUpdate="true" closable="true" />
+			
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:button value="Novo" outcome="/medicos/CadastroMedico" />
+					<p:commandButton value="Salvar" id="botaoSalvar"
+						actionListener="#{cadastroMedicoBean.salvar}" update="@form" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Pesquisa" outcome="/medicos/PesquisaMedicos" />
+				</p:toolbarGroup>
+			</p:toolbar>
+			
+			<p/><br/>
+			<p:outputLabel 
+			value="Selecione os procedimentos e valores para o convênio " />
+			<p:outputLabel value="#{cadastroConvenioValorBean.convenio.descricao}:" style="font-weight: bolder;"/><p/>
+
+
+			<p:commandButton style="margin-top: 20px" icon="ui-icon-search"
+				title="Procedimentos realizados" value="Buscar" type="button"
+				onclick="PF('dlgProc').show();" />
+
+			<p:dataTable id="conValorTable" var="conValor"
+				emptyMessage="Adicione Procedimentos"
+				style="margin-top: 10px; width: 50%" rows="10" paginator="true"
+				paginatorAlwaysVisible="false" paginatorPosition="bottom"
+				value="#{cadastroConvenioValorBean.convenio.valores}"
+				rowKey="#{conValor.id}">
+
+				<p:column style="text-align: center" headerText="Procedimentos">
+					<p:outputLabel value="#{conValor.procedimento.descricao}" />
+				</p:column>
+
+				<p:column style="text-align: center" headerText="Valor (R$)">
+					<p:inputNumber value="#{conValor.valor}" decimalSeparator=","
+						decimalPlaces="2"
+						onkeydown="if (event.keyCode === 13) {onchange();return false;}" />
+				</p:column>
+
+				<p:column style="width: 100px; text-align: center"
+					headerText="Excluir">
+					<p:commandButton icon="ui-icon-trash"
+						action="#{cadastroConvenioValorBean.retirarProcedimento}"
+						immediate="true" process="@form"
+						update="conValorTable">
+						<f:setPropertyActionListener value="#{conValor}"
+							target="#{cadastroConvenioValorBean.conValorSelected}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		
+		
+		<p:dialog header="Procedimentos Médicos" widgetVar="dlgProc"
+				modal="true" width="50%">
+				<h:outputText value="Selecione os procedimentos deste Convênio." />
+
+				<p:dataTable id="procTable" var="procs"
+					emptyMessage="Erro ao buscar procedimentos."
+					style="margin-top: 10px;" rows="10" paginator="true"
+					paginatorAlwaysVisible="false" paginatorPosition="bottom"
+					value="#{cadastroConvenioValorBean.procedimentos}"
+					selection="#{cadastroConvenioValorBean.proSelecionados}"
+					rowKey="#{procs.id}">
+
+					<p:column selectionMode="multiple"
+						style="width:16px;text-align:center" />
+
+					<p:column headerText="Descrição" style="text-align: center">
+						<p:outputLabel value="#{procs.descricao}" />
+					</p:column>
+				</p:dataTable>
+				<div align="right" style="margin-top: 10px">
+					<p:commandButton
+						value="Adicionar"
+						update="conValorTable" icon="ui-icon-plus"
+						action="#{cadastroConvenioValorBean.adicionarProcedimentos}"
+						onsuccess="PF('dlgProc').hide()" />
+				</div>
+			</p:dialog>
+		
+		
+		</h:form>
+	</ui:define>
+</ui:composition>

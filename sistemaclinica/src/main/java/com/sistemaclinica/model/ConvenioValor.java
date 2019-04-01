@@ -1,8 +1,7 @@
 package com.sistemaclinica.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,31 +9,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 @Entity
-@Table(name="convenio")
-public class Convenio implements Serializable {
-
+@Table(name="convenio_tbpreco")
+public class ConvenioValor implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
-	private String descricao;
+	private Convenio convenio;
+	private Procedimento procedimento;
+	private BigDecimal valor = BigDecimal.ZERO;
 	
-	private List<ConvenioValor> valores;
 	
-	
-	public Convenio() {
-		
-		valores = new ArrayList<ConvenioValor>();
-	}
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id_convenio")
+	@Column(name="id_tbpreco")
 	public Long getId() {
 		return id;
 	}
@@ -42,14 +35,34 @@ public class Convenio implements Serializable {
 		this.id = id;
 	}
 	
-	@NotBlank
-	@Column(nullable = false, length = 200)
-	public String getDescricao() {
-		return descricao;
+	@ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="id_convenio")
+	public Convenio getConvenio() {
+		return convenio;
 	}
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setConvenio(Convenio convenio) {
+		this.convenio = convenio;
 	}
+	
+	@ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="id_procedimento")
+	public Procedimento getProcedimento() {
+		return procedimento;
+	}
+	public void setProcedimento(Procedimento procedimento) {
+		this.procedimento = procedimento;
+	}
+	
+	
+	public BigDecimal getValor() {
+		return valor;
+	}
+	public void setValor(BigDecimal valor) {
+		this.valor = valor;
+	}
+	
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -65,7 +78,7 @@ public class Convenio implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Convenio other = (Convenio) obj;
+		ConvenioValor other = (ConvenioValor) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -74,11 +87,5 @@ public class Convenio implements Serializable {
 		return true;
 	}
 	
-	@OneToMany(mappedBy="convenio", cascade=CascadeType.ALL)
-	public List<ConvenioValor> getValores() {
-		return valores;
-	}
-	public void setValores(List<ConvenioValor> valores) {
-		this.valores = valores;
-	}
+	
 }

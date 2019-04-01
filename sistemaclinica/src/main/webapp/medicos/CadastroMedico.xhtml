@@ -124,7 +124,8 @@
 						</p:column>
 						
 						<p:column style="text-align: center" headerText="Valor (%)">
-							<p:inputNumber value="#{proc.valor}" />
+							<p:inputNumber value="#{proc.valor}" decimalSeparator="," decimalPlaces="2"
+								onkeydown="if (event.keyCode === 13) {onchange();return false;}" />
 						</p:column>
 
 						<p:column style="width: 100px; text-align: center" headerText="Excluir">
