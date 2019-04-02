@@ -21,7 +21,6 @@ import com.sistemaclinica.model.Procedimento;
 import com.sistemaclinica.model.ProcedimentoValor;
 import com.sistemaclinica.repository.EspecialidadeDAO;
 import com.sistemaclinica.repository.ProcedimentoDAO;
-import com.sistemaclinica.repository.ProcedimentoValorDAO;
 import com.sistemaclinica.service.CadastroMedicoService;
 import com.sistemaclinica.util.jsf.FacesUtil;
 
@@ -46,8 +45,6 @@ public class CadastroMedicoBean implements Serializable {
 	private List<Procedimento> procedimentos;
 	private List<Procedimento> proSelecionados;
 	
-	@Inject
-	private ProcedimentoValorDAO proValorDAO;
 	private List<ProcedimentoValor> proValors;
 	private ProcedimentoValor procSelected;
 	
@@ -111,7 +108,8 @@ public class CadastroMedicoBean implements Serializable {
 			
 			FacesUtil.addInfoMessage("Medico salvo com sucesso!");
 		} catch (Exception ne) {
-			FacesUtil.addErrorMessage(ne.getMessage());
+			ne.printStackTrace();
+			FacesUtil.redirect("/Erro.xhtml");
 		}
 	}
 	

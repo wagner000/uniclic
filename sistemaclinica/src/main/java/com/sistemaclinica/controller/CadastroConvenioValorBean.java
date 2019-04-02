@@ -8,15 +8,12 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.omnifaces.util.Faces;
-
 import com.sistemaclinica.model.Convenio;
 import com.sistemaclinica.model.ConvenioValor;
 import com.sistemaclinica.model.Procedimento;
 import com.sistemaclinica.repository.ConvenioDAO;
 import com.sistemaclinica.repository.ProcedimentoDAO;
 import com.sistemaclinica.util.jsf.FacesUtil;
-import com.sistemaclinica.util.jsf.JsfExceptionHandler;
 
 @Named
 @ViewScoped
@@ -46,12 +43,30 @@ public class CadastroConvenioValorBean implements Serializable {
 	}
 
 	
+	public void salvar() {
+		try {
+			this.convenio = convenioDAO.salvar(this.convenio);
+			//limpar();
+			
+			FacesUtil.addInfoMessage("Convênio salvo com sucesso!");
+		} catch (Exception ne) {
+			ne.printStackTrace();
+			FacesUtil.redirect("/Erro.xhtml");
+		}
+	}
+	
 	public void adicionarProcedimentos() {
-		
+		for(Procedimento p : proSelecionados) {
+			
+			ConvenioValor valor = new ConvenioValor();
+			valor.setConvenio(this.convenio);
+			valor.setProcedimento(p);
+			convenio.getValores().add(valor);
+		}
 	}
 	
 	public void retirarProcedimento() {
-		
+		convenio.getValores().remove(conValorSelected);
 	}
 	
 	
