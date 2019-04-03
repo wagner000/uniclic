@@ -33,19 +33,27 @@
 
 			<p:dataTable id="conveniosTable" var="convenio"
 				value="#{pesquisaConvenioBean.convenios}" rowKey="#{convenio}"
-				style="margin-top: 20px" emptyMessage="Nenhum convênio encontrado."
+				style="margin-top: 20px; width:80%;text-align:center;" emptyMessage="Nenhum convênio encontrado."
 				rows="20" paginator="true" paginatorAlwaysVisible="false"
 				paginatorPosition="bottom">
 
-				<p:column headerText="Código" style="text-align: center; width:5% ">
+				<p:column headerText="Código" style="text-align: center; width:15% ">
 					<h:outputText value="#{convenio.id}" />
 				</p:column>
 
 				<p:column headerText="Descrição" style="text-align: center; ">
 					<h:outputText value="#{convenio.descricao}" />
 				</p:column>
+				
+				<p:column headerText="Tb. de Preços" style="text-align: center; ; width:15%">
+				
+					<p:button icon="fa fa-fw fa-money" title="Valores"
+						outcome="/convenios/ConvenioValores">
+						<f:param name="conId" value="#{convenio.id}" />
+					</p:button>
+				</p:column>
 
-				<p:column style="width: 100px; text-align: center">
+				<p:column headerText="Editar / Excluir" style="width: 100px; text-align: center">
 					<p:commandButton icon="ui-icon-pencil" title="Editar"
 						oncomplete="PF('dlgConvenio').show()" process="@this"
 						update=":frmConvenios:dlgConvenio">
