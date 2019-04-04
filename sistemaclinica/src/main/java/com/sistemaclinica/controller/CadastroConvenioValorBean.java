@@ -2,6 +2,7 @@ package com.sistemaclinica.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.view.ViewScoped;
@@ -39,6 +40,11 @@ public class CadastroConvenioValorBean implements Serializable {
 		if (FacesUtil.isNotPostback()) {
 			procedimentos = procedimentoDAO.todos();
 			proSelecionados = new ArrayList<Procedimento>();
+			
+			for(ConvenioValor con : convenio.getValores()) {
+				proSelecionados.add(con.getProcedimento());
+			}
+			
 		}
 	}
 
@@ -56,13 +62,26 @@ public class CadastroConvenioValorBean implements Serializable {
 	}
 	
 	public void adicionarProcedimentos() {
-		for(Procedimento p : proSelecionados) {
+System.out.println("******");
+		for (Procedimento p : proSelecionados) {
 			
-			ConvenioValor valor = new ConvenioValor();
-			valor.setConvenio(this.convenio);
-			valor.setProcedimento(p);
-			convenio.getValores().add(valor);
+			for(int i = 0; i < convenio.getValores().size(); i++) {
+				if(!(convenio.getValores().get(i).getProcedimento().getDescricao().equals(p.getDescricao()))) {
+					System.out.println("igual**");
+					System.out.println(convenio.getValores().get(i).getProcedimento().getDescricao());
+					System.out.println(p.getDescricao());
+					
+				}
+			}
+			
+			
+				/*ConvenioValor valor = new ConvenioValor();
+				valor.setConvenio(this.convenio);
+				valor.setProcedimento(p);
+				convenio.getValores().add(valor);
+			*/
 		}
+
 	}
 	
 	public void retirarProcedimento() {

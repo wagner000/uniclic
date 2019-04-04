@@ -64,7 +64,7 @@
 					headerText="Excluir">
 					<p:commandButton icon="ui-icon-trash"
 						action="#{cadastroConvenioValorBean.retirarProcedimento}"
-						immediate="true" process="@form"
+						immediate="true" process="@this"
 						update="conValorTable">
 						<f:setPropertyActionListener value="#{conValor}"
 							target="#{cadastroConvenioValorBean.conValorSelected}" />
@@ -95,6 +95,7 @@
 				<div align="right" style="margin-top: 10px">
 					<p:commandButton
 						value="Adicionar"
+						process="@this"
 						update="conValorTable" icon="ui-icon-plus"
 						action="#{cadastroConvenioValorBean.adicionarProcedimentos}"
 						onsuccess="PF('dlgProc').hide()" />
