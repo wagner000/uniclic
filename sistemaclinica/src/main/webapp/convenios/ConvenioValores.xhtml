@@ -64,8 +64,7 @@
 					headerText="Excluir">
 					<p:commandButton icon="ui-icon-trash"
 						action="#{cadastroConvenioValorBean.retirarProcedimento}"
-						immediate="true" process="@this"
-						update="conValorTable">
+						update="@form">
 						<f:setPropertyActionListener value="#{conValor}"
 							target="#{cadastroConvenioValorBean.conValorSelected}" />
 					</p:commandButton>
@@ -73,7 +72,7 @@
 			</p:dataTable>
 		
 		
-		<p:dialog header="Procedimentos Médicos" widgetVar="dlgProc"
+		<p:dialog header="Procedimentos Médicos" widgetVar="dlgProc" id="dlgProc"
 				modal="true" width="50%">
 				<h:outputText value="Selecione os procedimentos deste Convênio." />
 
@@ -95,9 +94,8 @@
 				<div align="right" style="margin-top: 10px">
 					<p:commandButton
 						value="Adicionar"
-						process="@this"
-						update="conValorTable" icon="ui-icon-plus"
-						action="#{cadastroConvenioValorBean.adicionarProcedimentos}"
+						update="@form" icon="ui-icon-plus"
+						actionListener="#{cadastroConvenioValorBean.adicionarProcedimentos}"
 						onsuccess="PF('dlgProc').hide()" />
 				</div>
 			</p:dialog>

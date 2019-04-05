@@ -2,7 +2,6 @@ package com.sistemaclinica.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.view.ViewScoped;
@@ -33,62 +32,63 @@ public class CadastroConvenioValorBean implements Serializable {
 	private ConvenioDAO convenioDAO;
 
 	public void init() {
-		if(convenio == null || convenio.getId() == null) {
+		if (convenio == null || convenio.getId() == null) {
 			FacesUtil.redirect("/Erro.xhtml");
-			
+
 		}
 		if (FacesUtil.isNotPostback()) {
 			procedimentos = procedimentoDAO.todos();
+			System.out.println("** procedimentos.size: " + procedimentos.size());
 			proSelecionados = new ArrayList<Procedimento>();
-			
-			for(ConvenioValor con : convenio.getValores()) {
-				proSelecionados.add(con.getProcedimento());
+
+//			for(ConvenioValor con : convenio.getValores()) {
+//				proSelecionados.add(con.getProcedimento());
+//			}
+
+			for (ConvenioValor c : convenio.getValores()) {
+				procedimentos.remove(c.getProcedimento());
 			}
-			
+
+			System.out.println("** procedimentos.size: " + procedimentos.size());
 		}
 	}
 
-	
 	public void salvar() {
 		try {
 			this.convenio = convenioDAO.salvar(this.convenio);
-			//limpar();
-			
+			// limpar();
+
 			FacesUtil.addInfoMessage("Convênio salvo com sucesso!");
 		} catch (Exception ne) {
 			ne.printStackTrace();
 			FacesUtil.redirect("/Erro.xhtml");
 		}
 	}
-	
-	public void adicionarProcedimentos() {
-System.out.println("******");
-		for (Procedimento p : proSelecionados) {
-			
-			for(int i = 0; i < convenio.getValores().size(); i++) {
-				if(!(convenio.getValores().get(i).getProcedimento().getDescricao().equals(p.getDescricao()))) {
-					System.out.println("igual**");
-					System.out.println(convenio.getValores().get(i).getProcedimento().getDescricao());
-					System.out.println(p.getDescricao());
-					
-				}
-			}
-			
-			
-				/*ConvenioValor valor = new ConvenioValor();
-				valor.setConvenio(this.convenio);
-				valor.setProcedimento(p);
-				convenio.getValores().add(valor);
-			*/
-		}
 
+	public void adicionarProcedimentos() {
+
+		System.out.println("** proSelecionados.size: " + proSelecionados.size());
+		
+		for(Procedimento p : proSelecionados) {
+			
+			System.out.println("***"+p.getDescricao());
+			
+			ConvenioValor valor = new ConvenioValor();
+			valor.setConvenio(this.convenio);
+			valor.setProcedimento(p);
+			convenio.getValores().add(valor);
+			
+			procedimentos.remove(p);
+		}
+		proSelecionados = new ArrayList<Procedimento>();
 	}
-	
+
 	public void retirarProcedimento() {
+		procedimentos.add(conValorSelected.getProcedimento());
 		convenio.getValores().remove(conValorSelected);
+		
 	}
-	
-	
+
 	public ConvenioValor getConValorSelected() {
 		return conValorSelected;
 	}
@@ -113,13 +113,9 @@ System.out.println("******");
 		this.procedimentos = procedimentos;
 	}
 
-
-
 	public List<Procedimento> getProSelecionados() {
 		return proSelecionados;
 	}
-
-
 
 	public void setProSelecionados(List<Procedimento> proSelecionados) {
 		this.proSelecionados = proSelecionados;
