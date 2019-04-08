@@ -3,7 +3,6 @@ package com.sistemaclinica.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +34,7 @@ public class ConvenioValor implements Serializable {
 		this.id = id;
 	}
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
     @JoinColumn(name="id_convenio")
 	public Convenio getConvenio() {
 		return convenio;
@@ -44,7 +43,7 @@ public class ConvenioValor implements Serializable {
 		this.convenio = convenio;
 	}
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
     @JoinColumn(name="id_procedimento")
 	public Procedimento getProcedimento() {
 		return procedimento;

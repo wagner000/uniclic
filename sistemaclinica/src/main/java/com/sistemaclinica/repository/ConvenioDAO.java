@@ -25,6 +25,7 @@ public class ConvenioDAO implements Serializable {
 	
 	@Transacional
 	public Convenio salvar(Convenio convenio) {
+		//convenio = this.porId(convenio.getId());
 		return manager.merge(convenio);
 	}
 	

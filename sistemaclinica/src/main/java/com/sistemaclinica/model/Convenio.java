@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -74,7 +75,7 @@ public class Convenio implements Serializable {
 		return true;
 	}
 	
-	@OneToMany(mappedBy="convenio", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="convenio", cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
 	public List<ConvenioValor> getValores() {
 		return valores;
 	}

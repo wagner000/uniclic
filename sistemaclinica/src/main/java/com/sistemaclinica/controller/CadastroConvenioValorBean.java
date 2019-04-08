@@ -41,22 +41,15 @@ public class CadastroConvenioValorBean implements Serializable {
 			System.out.println("** procedimentos.size: " + procedimentos.size());
 			proSelecionados = new ArrayList<Procedimento>();
 
-//			for(ConvenioValor con : convenio.getValores()) {
-//				proSelecionados.add(con.getProcedimento());
-//			}
-
 			for (ConvenioValor c : convenio.getValores()) {
 				procedimentos.remove(c.getProcedimento());
 			}
-
-			System.out.println("** procedimentos.size: " + procedimentos.size());
 		}
 	}
 
 	public void salvar() {
 		try {
 			this.convenio = convenioDAO.salvar(this.convenio);
-			// limpar();
 
 			FacesUtil.addInfoMessage("Convênio salvo com sucesso!");
 		} catch (Exception ne) {
@@ -67,11 +60,7 @@ public class CadastroConvenioValorBean implements Serializable {
 
 	public void adicionarProcedimentos() {
 
-		System.out.println("** proSelecionados.size: " + proSelecionados.size());
-		
 		for(Procedimento p : proSelecionados) {
-			
-			System.out.println("***"+p.getDescricao());
 			
 			ConvenioValor valor = new ConvenioValor();
 			valor.setConvenio(this.convenio);
@@ -81,12 +70,13 @@ public class CadastroConvenioValorBean implements Serializable {
 			procedimentos.remove(p);
 		}
 		proSelecionados = new ArrayList<Procedimento>();
+		this.convenio = convenioDAO.salvar(this.convenio);
 	}
 
 	public void retirarProcedimento() {
 		procedimentos.add(conValorSelected.getProcedimento());
 		convenio.getValores().remove(conValorSelected);
-		
+		this.convenio = convenioDAO.salvar(this.convenio);
 	}
 
 	public ConvenioValor getConValorSelected() {

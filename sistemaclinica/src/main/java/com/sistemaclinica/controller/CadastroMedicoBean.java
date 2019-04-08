@@ -60,6 +60,10 @@ public class CadastroMedicoBean implements Serializable {
 			procedimentos = procedimentoDAO.todos();
 			proSelecionados = new ArrayList<Procedimento>();
 			
+			for (ProcedimentoValor c : medico.getProcedimentos()) {
+				procedimentos.remove(c.getProcedimento());
+			}
+			
 			scheduleMedico = new DefaultScheduleModel();
 			carregarSchedule();
 		}
@@ -126,11 +130,13 @@ public class CadastroMedicoBean implements Serializable {
 			proValor.setMedico(medico);
 			proValor.setProcedimento(p);
 			medico.getProcedimentos().add(proValor);
+			procedimentos.remove(p);
 		}
+		proSelecionados = new ArrayList<Procedimento>();
 	}
 	
 	public void retirarProcedimento() {
-		
+		procedimentos.add(procSelected.getProcedimento());
 		medico.getProcedimentos().remove(procSelected);
 	}
 	

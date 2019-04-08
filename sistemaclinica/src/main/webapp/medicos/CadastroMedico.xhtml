@@ -99,7 +99,7 @@
 							<p:commandButton icon="ui-icon-trash"
 								action="#{cadastroMedicoBean.retirarEspecialidade}"
 								immediate="true" process="@form"
-								update=":frmMedico:tabView:especMedico">
+								update=":frmMedico:tabView">
 								<f:setPropertyActionListener value="#{espec}"
 									target="#{cadastroMedicoBean.especSelected}" />
 							</p:commandButton>
@@ -131,8 +131,7 @@
 						<p:column style="width: 100px; text-align: center" headerText="Excluir">
 							<p:commandButton icon="ui-icon-trash"
 								action="#{cadastroMedicoBean.retirarProcedimento}"
-								immediate="true" process="@form"
-								update=":frmMedico:tabView:procMedico">
+								update=":frmMedico">
 								<f:setPropertyActionListener value="#{proc}"
 									target="#{cadastroMedicoBean.procSelected}" />
 							</p:commandButton>
@@ -187,7 +186,7 @@
 			</p:dialog>
 			
 			
-			<p:dialog header="Procedimentos Médicos" widgetVar="dlgProc"
+			<p:dialog header="Procedimentos Médicos" widgetVar="dlgProc" id="dlgProc"
 				modal="true" width="50%">
 				<h:outputText value="Selecione os procedimentos deste médico" />
 
@@ -209,7 +208,7 @@
 				<div align="right" style="margin-top: 10px">
 					<p:commandButton
 						value="Adicionar"
-						update=":frmMedico:tabView:procMedico" icon="ui-icon-plus"
+						update=":frmMedico:tabView, dlgProc" icon="ui-icon-plus"
 						action="#{cadastroMedicoBean.adicionarProcedimentos}"
 						onsuccess="PF('dlgProc').hide()" />
 				</div>
