@@ -29,7 +29,7 @@ public class Atendimento implements Serializable {
 	private Convenio convenio;
 	private Date data;
 	private Procedimento procedimento;
-	private FormaPagamento formaPagamento;
+	private FormaPagamentoOLD formaPagamento;
 	private String observacoes;
 	
 	
@@ -112,10 +112,10 @@ public class Atendimento implements Serializable {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(name= "forma_pagamento", nullable = false, length = 20)
-	public FormaPagamento getFormaPagamento() {
+	public FormaPagamentoOLD getFormaPagamento() {
 		return formaPagamento;
 	}
-	public void setFormaPagamento(FormaPagamento formaPagamento) {
+	public void setFormaPagamento(FormaPagamentoOLD formaPagamento) {
 		this.formaPagamento = formaPagamento;
 	}
 	
@@ -138,6 +138,14 @@ public class Atendimento implements Serializable {
 	@Transient
 	public boolean isFinalizado() {
 		return StatusAtendimento.FINALIZADO.equals(this.getStatus());
+	}
+	
+	@Transient
+	public boolean isEditavel() {
+		if(isCancelado() || isFinalizado()) {
+			return false;
+		}else
+			return true;
 	}
 	
 	@Transient

@@ -75,7 +75,7 @@
 					
 					<p:outputLabel value="Tipo Procedimento" for="procedimento" />
 					<p:selectOneMenu id="procedimento"
-						disabled="#{cadastroAtendimentoBean.atendimento.finalizado}"
+						disabled="#{not cadastroAtendimentoBean.atendimento.editavel}"
 						value="#{cadastroAtendimentoBean.atendimento.procedimento}">
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 						<f:selectItems value="#{cadastroAtendimentoBean.procedimentos}"
@@ -85,7 +85,7 @@
 
 					<p:outputLabel value="Paciente" for="pacienteComplete" />
 					<h:panelGroup>
-						<p:autoComplete readonly="#{cadastroAtendimentoBean.atendimento.finalizado}"
+						<p:autoComplete readonly="#{not cadastroAtendimentoBean.atendimento.editavel}"
 							value="#{cadastroAtendimentoBean.atendimento.paciente}"
 							id="pacienteComplete"
 							completeMethod="#{cadastroAtendimentoBean.carregaPacientes()}"
@@ -100,7 +100,7 @@
 					<h:panelGroup>
 					
 						<p:selectOneMenu id="medico"
-							disabled="#{cadastroAtendimentoBean.atendimento.finalizado}"
+							disabled="#{not cadastroAtendimentoBean.atendimento.editavel}"
 							value="#{cadastroAtendimentoBean.atendimento.medico}" >
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 						<f:selectItems value="#{cadastroAtendimentoBean.medicos}"
@@ -119,7 +119,7 @@
 
 					<p:outputLabel value="Convênio" for="convenio" />
 					<p:selectOneMenu id="convenio"
-					disabled="#{cadastroAtendimentoBean.atendimento.finalizado}"
+					disabled="#{not cadastroAtendimentoBean.atendimento.editavel}"
 						value="#{cadastroAtendimentoBean.atendimento.convenio}">
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 						<f:selectItems value="#{cadastroAtendimentoBean.convenios}"
@@ -129,7 +129,7 @@
 
 					<p:outputLabel value="Forma de Pagamento" for="pagamento" />
 					<p:selectOneMenu id="pagamento"
-						disabled="#{cadastroAtendimentoBean.atendimento.finalizado}"
+						disabled="#{not cadastroAtendimentoBean.atendimento.editavel}"
 						value="#{cadastroAtendimentoBean.atendimento.formaPagamento}">
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 						<f:selectItems value="#{cadastroAtendimentoBean.pagamentos}"
@@ -139,19 +139,19 @@
 
 					<p:outputLabel value="Data" for="dataAtendimento" />
 					<p:calendar id="dataAtendimento"
-						disabled="#{cadastroAtendimentoBean.atendimento.finalizado}"
+						disabled="#{not cadastroAtendimentoBean.atendimento.editavel}"
 						value="#{cadastroAtendimentoBean.atendimento.data}"
 						timeZone="GMT-3" pattern="dd/MM/yyyy HH:mm" />
 
 					<p:outputLabel value="Observações" />
 					<p:inputTextarea 
-						disabled="#{cadastroAtendimentoBean.atendimento.finalizado}"
+						disabled="#{not cadastroAtendimentoBean.atendimento.editavel}"
 						placeholder="Escreva aqui alguma observação..."
 						style="width:97%" />
 
 				</p:panelGrid>
 				<p:commandButton value="Salvar" 
-					style="margin-top:10px" rendered="#{not cadastroAtendimentoBean.atendimento.finalizado}"
+					style="margin-top:10px" rendered="#{cadastroAtendimentoBean.atendimento.editavel}"
 					actionListener="#{cadastroAtendimentoBean.salvar}"
 					update="schedule,panelGrid, msgs, listaHoje " />
 				<p:spacer/><p:spacer/>
@@ -159,7 +159,7 @@
 				<p:commandButton value="Cancelar" rendered="#{cadastroAtendimentoBean.atendimento.cancelavel}"
 					style="margin-top:10px; background:red; color: white;text-shadow: none;"
 					oncomplete="PF('confirmacaoExclusao').show()" process="@this"
-						update=":frmAtendimento:confirmacaoExclusaoDialog" />				
+						update=":frmAtendimento:confirmacaoExclusaoDialog,:frmAtendimento:confirmacaoExclusaoDialog " />				
 			</p:dialog>
 			
 			
@@ -171,7 +171,7 @@
 				<p:commandButton value="Sim"
 					onsuccess="PF('confirmacaoExclusao').hide();"
 					action="#{cadastroAtendimentoBean.cancelarAtendimento}"
-					update=":frmAtendimento:msgs, :frmAtendimento:panelGrid, :frmAtendimento:atendDialog" />
+					update=":frmAtendimento:msgs, :frmAtendimento:panelGrid, :frmAtendimento:panelGrid" />
 			</p:confirmDialog>
 </h:form>
 

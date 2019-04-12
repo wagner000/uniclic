@@ -22,7 +22,7 @@ import org.primefaces.model.ScheduleModel;
 
 import com.sistemaclinica.model.Atendimento;
 import com.sistemaclinica.model.Convenio;
-import com.sistemaclinica.model.FormaPagamento;
+import com.sistemaclinica.model.FormaPagamentoOLD;
 import com.sistemaclinica.model.Medico;
 import com.sistemaclinica.model.Paciente;
 import com.sistemaclinica.model.Procedimento;
@@ -207,8 +207,8 @@ public class CadastroAtendimentoBean implements Serializable {
 	}
 	
 	
-	public FormaPagamento[] getPagamentos() {
-		return FormaPagamento.values();
+	public FormaPagamentoOLD[] getPagamentos() {
+		return FormaPagamentoOLD.values();
 	}
 	
 	public StatusAtendimento[] getStatus() {
