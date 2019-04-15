@@ -29,7 +29,7 @@ public class Atendimento implements Serializable {
 	private Convenio convenio;
 	private Date data;
 	private Procedimento procedimento;
-	private FormaPagamentoOLD formaPagamento;
+	private FormaPagamento formaPagamento;
 	private String observacoes;
 	
 	
@@ -109,16 +109,6 @@ public class Atendimento implements Serializable {
 		this.procedimento = procedimento;
 	}
 	
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	@Column(name= "forma_pagamento", nullable = false, length = 20)
-	public FormaPagamentoOLD getFormaPagamento() {
-		return formaPagamento;
-	}
-	public void setFormaPagamento(FormaPagamentoOLD formaPagamento) {
-		this.formaPagamento = formaPagamento;
-	}
-	
 	
 	@Transient
 	public boolean isAgendado() {
@@ -190,6 +180,17 @@ public class Atendimento implements Serializable {
 
 	public void setObservacoes(String observacoes) {
 		this.observacoes = observacoes;
+	}
+
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name= "id_forma_pagamento", nullable = false)
+	public FormaPagamento getFormaPagamento() {
+		return formaPagamento;
+	}
+
+	public void setFormaPagamento(FormaPagamento formaPagamento) {
+		this.formaPagamento = formaPagamento;
 	}
 	
 	

@@ -22,13 +22,14 @@ import org.primefaces.model.ScheduleModel;
 
 import com.sistemaclinica.model.Atendimento;
 import com.sistemaclinica.model.Convenio;
-import com.sistemaclinica.model.FormaPagamentoOLD;
+import com.sistemaclinica.model.FormaPagamento;
 import com.sistemaclinica.model.Medico;
 import com.sistemaclinica.model.Paciente;
 import com.sistemaclinica.model.Procedimento;
 import com.sistemaclinica.model.StatusAtendimento;
 import com.sistemaclinica.repository.AtendimentoDAO;
 import com.sistemaclinica.repository.ConvenioDAO;
+import com.sistemaclinica.repository.FormaPagamentoDAO;
 import com.sistemaclinica.repository.MedicoDAO;
 import com.sistemaclinica.repository.PacienteDAO;
 import com.sistemaclinica.repository.ProcedimentoDAO;
@@ -50,6 +51,8 @@ public class CadastroAtendimentoBean implements Serializable {
 	private PacienteDAO pacienteDAO;
 	@Inject
 	private MedicoDAO medicoDao;
+	@Inject
+	private FormaPagamentoDAO pagamentoDAO;
 	
 	private Atendimento atendimento;
 	private List<Atendimento> atendimentos;
@@ -207,8 +210,8 @@ public class CadastroAtendimentoBean implements Serializable {
 	}
 	
 	
-	public FormaPagamentoOLD[] getPagamentos() {
-		return FormaPagamentoOLD.values();
+	public List<FormaPagamento> getPagamentos() {
+		return pagamentoDAO.todos();
 	}
 	
 	public StatusAtendimento[] getStatus() {

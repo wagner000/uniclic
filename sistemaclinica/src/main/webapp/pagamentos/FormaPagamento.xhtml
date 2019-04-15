@@ -12,7 +12,7 @@
 	
 		<f:metadata>
 			<o:viewParam name="formaPagamento" />
-			<f:event listener="#{FormaPagamentoBean.init}" type="preRenderView" />
+			<f:event listener="#{formaPagamentoBean.init}" type="preRenderView" />
 		</f:metadata>
 	
 		<h:form id="frmFormaPag">
@@ -26,18 +26,18 @@
 				</p:toolbarGroup>
 				<p:toolbarGroup align="right">
 					<p:commandButton process="@this" value="Novo" oncomplete="PF('dlgFormaPag').show()"
-					actionListener="#{FormaPagamentoBean.novo}" update=":frmFormaPag:dlgFormaPag" />
+					actionListener="#{formaPagamentoBean.novo}" update=":frmFormaPag:dlgFormaPag" />
 				</p:toolbarGroup>
 			</p:toolbar>
 
-			<p:dataTable id="formaPagamentoTable" var="procedimento"
-				value="#{FormaPagamentoBean.formaPagamentos}"
-				rowKey="#{formaPag}" style="margin-top: 20px"
+			<p:dataTable id="formaPagamentoTable" var="formaPag"
+				value="#{formaPagamentoBean.formaPagamentos}"
+				rowKey="#{formaPag}" style="margin-top: 20px;"
 				emptyMessage="Nenhuma Forma de Pagamento encontrado." rows="20"
 				paginator="true" paginatorAlwaysVisible="false"
 				paginatorPosition="bottom">
 
-				<p:column headerText="Código" style="text-align: center; width:5% ">
+				<p:column headerText="Código" style="text-align: center; width:8% ">
 					<h:outputText value="#{formaPag.id}" />
 				</p:column>
 
@@ -45,20 +45,22 @@
 					<h:outputText value="#{formaPag.descricao}" />
 				</p:column>
 
-				<p:column headerText="Tipo" style="text-align: center; ">
-					<h:outputText value="#{formaPag.taxa}" />
+				<p:column headerText="Taxa (%)" style="text-align: center; ">
+					<h:outputText value="#{formaPag.taxa}" >
+						<f:convertNumber minFractionDigits="2"  />
+					</h:outputText>
 				</p:column>
 
-				<p:column style="width: 100px; text-align: center">
+				<p:column headerText="Editar/Excluir" style="width: 100px; text-align: center">
 					<p:commandButton icon="ui-icon-pencil" title="Editar" oncomplete="PF('dlgFormaPag').show()"
 	    					process="@this" update=":frmFormaPag:dlgFormaPag" >
-	    				<f:setPropertyActionListener target="#{FormaPagamentoBean.formaPagSelecionado}" 
+	    				<f:setPropertyActionListener target="#{formaPagamentoBean.formaPagamentoSelecionado}" 
 	    					value="#{formaPag}" />
 	    			</p:commandButton>
 					
 					<p:commandButton icon="ui-icon-trash" title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
 	    					process="@this" update=":frmFormaPag:confirmacaoExclusaoDialog" >
-	    				<f:setPropertyActionListener target="#{FormaPagamentoBean.formaPagSelecionado}" 
+	    				<f:setPropertyActionListener target="#{formaPagamentoBean.formaPagamentoSelecionado}" 
 	    					value="#{formaPag}" />
 	    			</p:commandButton>
 				</p:column>
@@ -72,23 +74,28 @@
 
 				<p:outputLabel value="Descrição" for="pagDescricao" />
 				<p:inputText id="pagDescricao" size="40" maxlength="40"
-					value="#{FormaPagamentoBean.formaPagSelecionado.descricao}" />
+					value="#{formaPagamentoBean.formaPagamentoSelecionado.descricao}" />
+				
+				<p:outputLabel value="Taxa(%)" for="taxa" />
+				<p:inputNumber id="taxa" value="#{formaPagamentoBean.formaPagamentoSelecionado.taxa}"
+					decimalSeparator="," decimalPlaces="2"
+					onkeydown="if (event.keyCode === 13) {onchange();return false;}" />
 				
 				</p:panelGrid>
 				
 				<div align="right" style="margin-top: 10px">
 					<p:commandButton update="formaPagamentoTable"
-						icon="ui-icon-plus" value="Salvar" actionListener="#{FormaPagamentoBean.salvar}"
+						icon="ui-icon-plus" value="Salvar" actionListener="#{formaPagamentoBean.salvar}"
 						oncomplete="PF('dlgFormaPag').hide()" />
 				</div>
 			</p:dialog>
 
 			<p:confirmDialog header="Exclusão de Procedimento" 
-	    		message="Tem certeza que deseja excluir a Forma de Pagamento: #{FormaPagamentoBean.formaPagSelecionado.descricao}?"
+	    		message="Tem certeza que deseja excluir a Forma de Pagamento: #{formaPagamentoBean.formaPagamentoSelecionado.descricao}?"
 	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
 	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" />
 	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide()"
-	    			action="#{FormaPagamentoBean.excluir}" process="@this"
+	    			action="#{formaPagamentoBean.excluir}" process="@this"
 	    			update=":frmFormaPag:formaPagamentoTable" />
 	    	</p:confirmDialog>
 

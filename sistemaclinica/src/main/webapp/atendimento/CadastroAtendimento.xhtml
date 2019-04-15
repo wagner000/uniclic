@@ -128,15 +128,22 @@
 					</p:selectOneMenu>
 
 					<p:outputLabel value="Forma de Pagamento" for="pagamento" />
+					<h:panelGroup>
 					<p:selectOneMenu id="pagamento"
 						disabled="#{not cadastroAtendimentoBean.atendimento.editavel}"
-						value="#{cadastroAtendimentoBean.atendimento.formaPagamento}">
+						value="#{cadastroAtendimentoBean.atendimento.formaPagamento}" >
+						<p:ajax update="taxa" />
 						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 						<f:selectItems value="#{cadastroAtendimentoBean.pagamentos}"
 							var="pagamento" itemValue="#{pagamento}"
 							itemLabel="#{pagamento.descricao}" />
 					</p:selectOneMenu>
-
+					<p:outputLabel id="taxa" value="#{cadastroAtendimentoBean.atendimento.formaPagamento.taxa} %" 
+						style="margin-left:20px;color:red;font-weight:bold;">
+						<f:convertNumber minFractionDigits="2" />
+						</p:outputLabel>
+					</h:panelGroup>					
+					
 					<p:outputLabel value="Data" for="dataAtendimento" />
 					<p:calendar id="dataAtendimento"
 						disabled="#{not cadastroAtendimentoBean.atendimento.editavel}"

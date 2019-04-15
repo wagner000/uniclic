@@ -47,6 +47,7 @@ public class JsfExceptionHandler extends ExceptionHandlerWrapper {
 					FacesUtil.addErrorMessage(negocioException.getMessage());
 				} else {
 					handled = true;
+					
 					redirect("/Erro.xhtml");
 				}
 			} finally {
