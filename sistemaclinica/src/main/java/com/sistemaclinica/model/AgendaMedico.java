@@ -23,7 +23,7 @@ public class AgendaMedico implements Serializable {
 	
 	private Long id;
 	private Medico medico;
-	private Date data; 
+	private Date data;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

@@ -29,7 +29,7 @@ public class Atendimento implements Serializable {
 	private Convenio convenio;
 	private Date data;
 	private Procedimento procedimento;
-	private FormaPagamento formaPagamento;
+	//private FormaPagamento formaPagamento;
 	private String observacoes;
 	
 	
