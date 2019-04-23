@@ -1,17 +1,23 @@
 package com.sistemaclinica.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -30,12 +36,14 @@ public class Atendimento implements Serializable {
 	private Date data;
 	private Procedimento procedimento;
 	//private FormaPagamento formaPagamento;
+	private List<Pagamento> pagamentos;
 	private String observacoes;
 	
 	
 	public Atendimento() {
 		this.medico = new Medico();
 		this.data = new Date();
+		this.pagamentos = new ArrayList<Pagamento>();
 	}
 	
 	@Id
@@ -110,6 +118,26 @@ public class Atendimento implements Serializable {
 	}
 	
 	
+	
+	public void adcionarItemVazio() {
+			
+		if(this.isEditavel()) {
+			Pagamento p = new Pagamento();
+			p.setAtendimento(this);
+			
+			this.getPagamentos().add(0, p); //sempre que chamar esse metodo ele adiciona a primeira linha
+		}
+	}
+	
+	public void removerItemVazio() {
+		Pagamento primeiroItem = this.getPagamentos().get(0);
+		
+		if(primeiroItem != null && primeiroItem.getAtendimento().getId()==null) {
+			this.getPagamentos().remove(0);
+		}
+	}
+	
+	
 	@Transient
 	public boolean isAgendado() {
 		return ( StatusAtendimento.AGENDADO.equals(this.getStatus()) && this.getId()!=null );
@@ -148,6 +176,11 @@ public class Atendimento implements Serializable {
 		}
 	}
 	
+	@Transient
+	public BigDecimal getValor() {
+		
+	}
+	
 	//====================================
 	@Override
 	public int hashCode() {
@@ -182,17 +215,15 @@ public class Atendimento implements Serializable {
 		this.observacoes = observacoes;
 	}
 
-	@NotNull
-	@ManyToOne
-	@JoinColumn(name= "id_forma_pagamento", nullable = false)
-	public FormaPagamento getFormaPagamento() {
-		return formaPagamento;
+	
+	@OneToMany(mappedBy = "atendimento", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	public List<Pagamento> getPagamentos() {
+		return pagamentos;
 	}
 
-	public void setFormaPagamento(FormaPagamento formaPagamento) {
-		this.formaPagamento = formaPagamento;
+	public void setPagamentos(List<Pagamento> pagamentos) {
+		this.pagamentos = pagamentos;
 	}
-	
 	
 	
 }

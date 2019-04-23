@@ -9,7 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="pagamento")
@@ -23,6 +26,10 @@ public class Pagamento implements Serializable {
 	private LocalDateTime data;
 	private FormaPagamento formaPagamento;
 	
+	public Pagamento() {
+		// TODO Auto-generated constructor stub
+		this.formaPagamento = new FormaPagamento();
+	}
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -42,7 +49,9 @@ public class Pagamento implements Serializable {
 		this.valor = valor;
 	}
 	
-	
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name= "id_atendimento")
 	public Atendimento getAtendimento() {
 		return atendimento;
 	}
@@ -58,10 +67,13 @@ public class Pagamento implements Serializable {
 		this.data = data;
 	}
 	
-	
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name= "id_forma_pagamento", nullable = false)
 	public FormaPagamento getFormaPagamento() {
 		return formaPagamento;
 	}
+
 	public void setFormaPagamento(FormaPagamento formaPagamento) {
 		this.formaPagamento = formaPagamento;
 	}

@@ -1,6 +1,7 @@
 package com.sistemaclinica.controller;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,11 +21,14 @@ import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleModel;
 
+import com.logistica.model.ItemPedido;
+import com.logistica.model.Produto;
 import com.sistemaclinica.model.Atendimento;
 import com.sistemaclinica.model.Convenio;
 import com.sistemaclinica.model.FormaPagamento;
 import com.sistemaclinica.model.Medico;
 import com.sistemaclinica.model.Paciente;
+import com.sistemaclinica.model.Pagamento;
 import com.sistemaclinica.model.Procedimento;
 import com.sistemaclinica.model.StatusAtendimento;
 import com.sistemaclinica.repository.AtendimentoDAO;
@@ -129,6 +133,7 @@ public class CadastroAtendimentoBean implements Serializable {
 		for(Atendimento at : atendimentos) {
 			if(at.getId() == (Long) event.getData()) {
 				atendimento = at;
+				atendimento.adcionarItemVazio();
 				return;
 			}
 		}
@@ -209,6 +214,50 @@ public class CadastroAtendimentoBean implements Serializable {
 		return medicoDao.todos();
 	}
 	
+	
+	
+	public void atualizarValor(Pagamento item, int linha) {
+		if(item.getValor().longValue() < 1) {
+			if(linha ==0) {
+				item.setValor(BigDecimal.ZERO);
+			}else {
+				this.getAtendimento().getPagamentos().remove(linha);
+			}
+		}
+	}
+	
+	
+	public void carregarLinhaEditavel() {
+		
+		
+		
+		
+		ItemPedido item = this.pedido.getItens().get(0);
+		
+		if(produtoLinhaEditavel != null) {
+			if(this.existeItemComProduto(this.produtoLinhaEditavel)) {
+				FacesUtil.addErrorMessage("Produto já consta no pedido!");
+			}else {
+				item.setProduto(this.produtoLinhaEditavel);
+				this.pedido.adcionarItemVazio();
+				this.produtoLinhaEditavel = null;
+				this.codigo = null;
+			}
+		}
+	}
+	
+	//verifica se o produto já está inserido no pedido
+	private boolean existeItemComProduto(Produto produto) {
+		boolean existeItem = false;
+		
+		for(ItemPedido item : this.pedido.getItens()) {
+			if(produto.equals(item.getProduto())) {
+				existeItem = true;
+				break;
+			}
+		}
+		return existeItem;
+	}
 	
 	public List<FormaPagamento> getPagamentos() {
 		return pagamentoDAO.todos();

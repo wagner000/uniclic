@@ -31,9 +31,15 @@ public class FormaPagamentoConverter implements Converter {
 	@Override
 	public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2) {
 		if (arg2 != null) {
-			return new Long( ((FormaPagamento) arg2).getId()).toString();
+			FormaPagamento pag = (FormaPagamento) arg2;
+			if(pag.getId() == null) {
+				return null;
+			}else {
+				return pag.getId().toString();
+			}
+		}else {
+			return "";
 		}
-		return "";
 	}
 
 }
