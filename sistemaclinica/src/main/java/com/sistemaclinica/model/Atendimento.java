@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,11 +23,16 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import com.sistemaclinica.repository.ConvenioDAO;
+
 @Entity
 @Table(name="atendimento")
 public class Atendimento implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	@Inject
+	private ConvenioDAO conDao;
 	
 	private Long id;
 	private StatusAtendimento status = StatusAtendimento.AGENDADO;
@@ -137,6 +143,21 @@ public class Atendimento implements Serializable {
 		}
 	}
 	
+	@Transient
+	public BigDecimal getValor() {
+		
+		if(getConvenio() !=null && getProcedimento() !=null) {
+			
+			for(ConvenioValor valor :this.convenio.getValores()) {
+				if(valor.getProcedimento().equals(getProcedimento())) {
+					return valor.getValor();
+				}	
+			}
+		}else {
+			return BigDecimal.ZERO;
+		}
+		return BigDecimal.ZERO;
+	}
 	
 	@Transient
 	public boolean isAgendado() {
@@ -174,11 +195,6 @@ public class Atendimento implements Serializable {
 		}else{
 			return false;
 		}
-	}
-	
-	@Transient
-	public BigDecimal getValor() {
-		
 	}
 	
 	//====================================

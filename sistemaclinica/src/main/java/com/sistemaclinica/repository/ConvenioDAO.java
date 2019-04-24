@@ -6,8 +6,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 
 import com.sistemaclinica.model.Convenio;
+import com.sistemaclinica.model.ConvenioValor;
 import com.sistemaclinica.util.jpa.Transacional;
 import com.sistemaclinica.util.jsf.NegocioException;
 
@@ -21,6 +23,13 @@ public class ConvenioDAO implements Serializable {
 	
 	public Convenio porId(Long id) {
 		return manager.find(Convenio.class, id);
+	}
+	
+	
+	public List<ConvenioValor> valores(Convenio convenio) {
+		Query q = manager.createQuery("FROM ConvenioValor valor WHERE valor.convenio.id = :id",ConvenioValor.class);
+		q.setParameter("id", convenio.getId());
+		return q.getResultList();
 	}
 	
 	@Transacional

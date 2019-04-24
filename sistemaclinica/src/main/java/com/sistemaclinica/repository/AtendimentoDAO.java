@@ -21,9 +21,14 @@ public class AtendimentoDAO implements Serializable {
 
 	@Inject
 	private EntityManager manager;
+	
+	@Inject
+	private ConvenioDAO conDao;
 
 	public Atendimento porId(Long id) {
-		return manager.find(Atendimento.class, id);
+		Atendimento atendimento = manager.find(Atendimento.class, id);
+		atendimento.getConvenio().setValores(conDao.valores(atendimento.getConvenio()));
+		return atendimento;
 	}
 
 	@Transacional

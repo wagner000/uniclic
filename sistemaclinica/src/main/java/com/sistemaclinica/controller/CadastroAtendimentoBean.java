@@ -21,8 +21,6 @@ import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleModel;
 
-import com.logistica.model.ItemPedido;
-import com.logistica.model.Produto;
 import com.sistemaclinica.model.Atendimento;
 import com.sistemaclinica.model.Convenio;
 import com.sistemaclinica.model.FormaPagamento;
@@ -132,7 +130,7 @@ public class CadastroAtendimentoBean implements Serializable {
 		
 		for(Atendimento at : atendimentos) {
 			if(at.getId() == (Long) event.getData()) {
-				atendimento = at;
+				atendimento = atendimentoDAO.porId(at.getId());
 				atendimento.adcionarItemVazio();
 				return;
 			}
@@ -226,7 +224,7 @@ public class CadastroAtendimentoBean implements Serializable {
 		}
 	}
 	
-	
+	/*
 	public void carregarLinhaEditavel() {
 		
 		
@@ -258,7 +256,7 @@ public class CadastroAtendimentoBean implements Serializable {
 		}
 		return existeItem;
 	}
-	
+	*/
 	public List<FormaPagamento> getPagamentos() {
 		return pagamentoDAO.todos();
 	}

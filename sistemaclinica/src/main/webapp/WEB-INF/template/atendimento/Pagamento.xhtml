@@ -4,40 +4,41 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-	<p:dataTable value="#{cadastroAtendimentoBean.atendimento.pagamentos}" var="item"
-		id="tabelaItens" rowIndexVar="linha" style="width:480px;" >
+
+
+	<p:dataTable value="#{cadastroAtendimentoBean.atendimento.pagamentos}"
+		var="item" id="tabelaItens" rowIndexVar="linha" style="width:480px;">
 
 		<p:column headerText="Forma de Pagamento">
 
 			<h:outputText value="#{item.formaPagamento.descricao}"
 				rendered="false" />
 
-			
+
 			<p:selectOneMenu id="formaPagamento" style="width:90%;"
-						value="#{item.formaPagamento}">
-						<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-						<f:selectItems value="#{cadastroAtendimentoBean.pagamentos}"
-							itemValue="#{formaPag}" itemLabel="#{formaPag.descricao}"
-							var="formaPag" />
-					</p:selectOneMenu>
+				value="#{item.formaPagamento}">
+				<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+				<f:selectItems value="#{cadastroAtendimentoBean.pagamentos}"
+					itemValue="#{formaPag}" itemLabel="#{formaPag.descricao}"
+					var="formaPag" />
+			</p:selectOneMenu>
 		</p:column>
 
-		<p:column headerText="Valor"
-			style="text-align: center; width: 100px">
+		<p:column headerText="Valor" style="text-align: center; width: 100px">
 			<p:inputText size="8" value="#{item.valor}" readonly="false"
 				onkeydown="if (event.keyCode === 13) {onchange();return false;}">
-				<p:ajax event="change" update="tabelaItens" listener="#{cadastroAtendimentoBean.atualizarValor(item,linha)}" />
+				<p:ajax event="change" update="tabelaItens"
+					listener="#{cadastroAtendimentoBean.atualizarValor(item,linha)}" />
 			</p:inputText>
 		</p:column>
 
 
 		<p:columnGroup type="footer">
 			<p:row>
-				<p:column colspan="1" footerText="Total"
-					style="text-align: right" />
+				<p:column colspan="1" footerText="Total" style="text-align: right" />
 				<p:column style="text-align: right;">
 					<f:facet name="footer">
-						<!-- <h:outputText value="#{cadastroPedidoBean.pedido.quantidadeTotal}" /> -->
+						<h:outputText value="#{cadastroAtendimentoBean.atendimento.valor}" />
 					</f:facet>
 				</p:column>
 			</p:row>
