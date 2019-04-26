@@ -4,7 +4,46 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
+	<p:panelGrid columns="2" style="width: 100%; margin-top: 20px; margin-bottom:10px;"
+		columnClasses="rotulo, campo">
+		
+		<h:panelGroup>
+		<p:outputLabel value="Procedimento: " />
+		<h:outputText value="#{cadastroAtendimentoBean.atendimento.procedimento.descricao}"
+			style="font-weight:bolder;" />
+		</h:panelGroup>
+		
+		<h:panelGroup>
+		<p:outputLabel value="Convênio: " />
+		<h:outputText value="#{cadastroAtendimentoBean.atendimento.convenio.descricao}" 
+			style="font-weight:bolder;"/>
+		</h:panelGroup>
+		
+		<h:panelGroup>
+		<p:outputLabel value="Valor: R$ " />
+		<h:outputText value="#{cadastroAtendimentoBean.atendimento.valor}" 
+			style="font-weight:bolder;"/>
+		</h:panelGroup>
+		
+		<h:panelGroup>
+		<p:outputLabel value="Desconto: R$ " />
+		<p:inputNumber value="#{cadastroAtendimentoBean.atendimento.desconto}"
+			onkeydown="if (event.keyCode === 13) {onchange();return false;}" />
+			
+		</h:panelGroup>
+		
+		<h:panelGroup>
+		<p:outputLabel value="Total: R$ " />
+		<h:outputText value="#{cadastroAtendimentoBean.atendimento.valorTotal}" 
+			style="font-weight:bolder;" id="valorTotal" />
+		</h:panelGroup>
+		
+		<h:panelGroup>
+		<p:outputLabel value=" " />
+		<h:outputText value="" />
+		</h:panelGroup>
 
+	</p:panelGrid>
 
 	<p:dataTable value="#{cadastroAtendimentoBean.atendimento.pagamentos}"
 		var="item" id="tabelaItens" rowIndexVar="linha" style="width:480px;">
@@ -38,7 +77,7 @@
 				<p:column colspan="1" footerText="Total" style="text-align: right" />
 				<p:column style="text-align: right;">
 					<f:facet name="footer">
-						<h:outputText value="#{cadastroAtendimentoBean.atendimento.valor}" />
+						<h:outputText value="#{cadastroAtendimentoBean.atendimento.valorPago}" />
 					</f:facet>
 				</p:column>
 			</p:row>

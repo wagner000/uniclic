@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,16 +22,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import com.sistemaclinica.repository.ConvenioDAO;
-
 @Entity
 @Table(name="atendimento")
 public class Atendimento implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	@Inject
-	private ConvenioDAO conDao;
 	
 	private Long id;
 	private StatusAtendimento status = StatusAtendimento.AGENDADO;
@@ -44,6 +38,7 @@ public class Atendimento implements Serializable {
 	//private FormaPagamento formaPagamento;
 	private List<Pagamento> pagamentos;
 	private String observacoes;
+	private BigDecimal desconto = BigDecimal.ZERO;
 	
 	
 	public Atendimento() {
@@ -143,6 +138,27 @@ public class Atendimento implements Serializable {
 		}
 	}
 	
+	
+	@Transient
+	public BigDecimal getValorTotal() {
+		
+		if(getValor() != null && getDesconto() !=null) {
+			BigDecimal total = getValor().subtract(getDesconto());
+			return total;
+		}else
+			return BigDecimal.ZERO;
+		
+	}
+	
+	@Transient
+	public BigDecimal getValorPago() {
+		BigDecimal valorPago = BigDecimal.ZERO;
+		
+		for(Pagamento p : getPagamentos()) {
+			valorPago = valorPago.add(p.getValor());
+		}return valorPago;
+	}
+	
 	@Transient
 	public BigDecimal getValor() {
 		
@@ -239,6 +255,14 @@ public class Atendimento implements Serializable {
 
 	public void setPagamentos(List<Pagamento> pagamentos) {
 		this.pagamentos = pagamentos;
+	}
+
+	public BigDecimal getDesconto() {
+		return desconto;
+	}
+
+	public void setDesconto(BigDecimal desconto) {
+		this.desconto = desconto;
 	}
 	
 	
