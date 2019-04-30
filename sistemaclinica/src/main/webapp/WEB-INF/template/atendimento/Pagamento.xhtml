@@ -28,12 +28,13 @@
 		<h:panelGroup>
 		<p:outputLabel value="Desconto: R$ " />
 		<p:inputNumber value="#{cadastroAtendimentoBean.atendimento.desconto}"
-			onkeydown="if (event.keyCode === 13) {onchange();return false;}" />
-			
+			onkeydown="if (event.keyCode === 13) {onchange();return false;}" >
+		<p:ajax event="change" update="valorTotal" />
+		</p:inputNumber>
 		</h:panelGroup>
 		
 		<h:panelGroup>
-		<p:outputLabel value="Total: R$ " />
+		<p:outputLabel value="A Pagar: R$ " />
 		<h:outputText value="#{cadastroAtendimentoBean.atendimento.valorTotal}" 
 			style="font-weight:bolder;" id="valorTotal" />
 		</h:panelGroup>
@@ -51,11 +52,10 @@
 		<p:column headerText="Forma de Pagamento">
 
 			<h:outputText value="#{item.formaPagamento.descricao}"
-				rendered="false" />
-
+				rendered="#{not item.ok}" />
 
 			<p:selectOneMenu id="formaPagamento" style="width:90%;"
-				value="#{item.formaPagamento}">
+				value="#{item.formaPagamento}" rendered="#{item.ok}">
 				<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
 				<f:selectItems value="#{cadastroAtendimentoBean.pagamentos}"
 					itemValue="#{formaPag}" itemLabel="#{formaPag.descricao}"
@@ -67,7 +67,7 @@
 			<p:inputText size="8" value="#{item.valor}" readonly="false"
 				onkeydown="if (event.keyCode === 13) {onchange();return false;}">
 				<p:ajax event="change" update="tabelaItens"
-					listener="#{cadastroAtendimentoBean.atualizarValor(item,linha)}" />
+					listener="#{cadastroAtendimentoBean.atualizarValor(item)}" />
 			</p:inputText>
 		</p:column>
 

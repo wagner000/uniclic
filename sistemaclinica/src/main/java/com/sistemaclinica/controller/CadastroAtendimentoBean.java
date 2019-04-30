@@ -64,6 +64,8 @@ public class CadastroAtendimentoBean implements Serializable {
 	private List<Paciente> pacientes;
 	private List<Medico> medicos;
 	
+	private FormaPagamento formaPagamento;
+	
 	private ScheduleModel schedule;
 	
 	private boolean diaAtivo = false;
@@ -80,6 +82,8 @@ public class CadastroAtendimentoBean implements Serializable {
 			
 			carregarListaHoje();
 			carregarSchedule();
+			
+			formaPagamento = new FormaPagamento();
 		}
 	}
 	
@@ -131,7 +135,11 @@ public class CadastroAtendimentoBean implements Serializable {
 		for(Atendimento at : atendimentos) {
 			if(at.getId() == (Long) event.getData()) {
 				atendimento = atendimentoDAO.porId(at.getId());
-				atendimento.adcionarItemVazio();
+				
+				if(atendimento.isEditavel()) {
+					atendimento.setDesconto(BigDecimal.ZERO);
+					//atendimento.adcionarItemVazio();
+				}
 				return;
 			}
 		}
@@ -212,16 +220,25 @@ public class CadastroAtendimentoBean implements Serializable {
 		return medicoDao.todos();
 	}
 	
-	
-	
-	public void atualizarValor(Pagamento item, int linha) {
-		if(item.getValor().longValue() < 1) {
-			if(linha ==0) {
-				item.setValor(BigDecimal.ZERO);
-			}else {
-				this.getAtendimento().getPagamentos().remove(linha);
-			}
+	public void atualizarValor(Pagamento pagamento) {
+		
+		//atendimento.getPagamentos().get(0).setFormaPagamento(pagamento.getFormaPagamento());
+		
+		System.out.println("**** ID ATEND: "+atendimento.getPagamentos().get(0).getAtendimento().getId());
+		System.out.println("*** FORMA PAG: "+atendimento.getPagamentos().get(0).getFormaPagamento().getDescricao());
+		
+		System.out.println("**** PAGA: "+pagamento.getFormaPagamento().getDescricao());
+		
+		//atendimento.adcionarItemVazio();
+		
+		/*if(pagamento.getValor().compareTo(BigDecimal.ZERO) <= 0) {
+			pagamento.setValor(BigDecimal.ZERO);
+			return;
 		}
+		if(atendimento.getValorPago().compareTo(atendimento.getValorTotal()) != 0
+				&& pagamento.getFormaPagamento() != null) {
+			
+		}*/
 	}
 	
 	/*
@@ -339,6 +356,14 @@ public class CadastroAtendimentoBean implements Serializable {
 
 	public void setDiaAtivo(boolean diaAtivo) {
 		this.diaAtivo = diaAtivo;
+	}
+
+	public FormaPagamento getFormaPagamento() {
+		return formaPagamento;
+	}
+
+	public void setFormaPagamento(FormaPagamento formaPagamento) {
+		this.formaPagamento = formaPagamento;
 	}
 
 	

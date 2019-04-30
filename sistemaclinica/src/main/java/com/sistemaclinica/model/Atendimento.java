@@ -35,8 +35,7 @@ public class Atendimento implements Serializable {
 	private Convenio convenio;
 	private Date data;
 	private Procedimento procedimento;
-	//private FormaPagamento formaPagamento;
-	private List<Pagamento> pagamentos;
+	private List<Pagamento> pagamentos = new ArrayList<Pagamento>();
 	private String observacoes;
 	private BigDecimal desconto = BigDecimal.ZERO;
 	
@@ -45,6 +44,7 @@ public class Atendimento implements Serializable {
 		this.medico = new Medico();
 		this.data = new Date();
 		this.pagamentos = new ArrayList<Pagamento>();
+		this.desconto = BigDecimal.ZERO;
 	}
 	
 	@Id
@@ -147,7 +147,6 @@ public class Atendimento implements Serializable {
 			return total;
 		}else
 			return BigDecimal.ZERO;
-		
 	}
 	
 	@Transient
@@ -256,9 +255,10 @@ public class Atendimento implements Serializable {
 	public void setPagamentos(List<Pagamento> pagamentos) {
 		this.pagamentos = pagamentos;
 	}
-
+	
+	@Column(name="desconto")
 	public BigDecimal getDesconto() {
-		return desconto;
+		return this.desconto;
 	}
 
 	public void setDesconto(BigDecimal desconto) {
