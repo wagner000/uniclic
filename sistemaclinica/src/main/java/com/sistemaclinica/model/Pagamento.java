@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.jboss.weld.security.GetProtectionDomainAction;
+
 @Entity
 @Table(name="pagamento")
 public class Pagamento implements Serializable {
@@ -30,14 +32,12 @@ public class Pagamento implements Serializable {
 	public Pagamento() {
 		// TODO Auto-generated constructor stub
 		this.data = LocalDateTime.now();
-		this.formaPagamento = new FormaPagamento();
 	}
 	
 	
 	@Transient
 	public boolean isOk() {
-		return (getFormaPagamento()!=null && getAtendimento()!=null
-				&& getAtendimento().getId()!=null && !valor.equals(BigDecimal.ZERO));
+		return (getFormaPagamento()!=null && !getValor().equals(BigDecimal.ZERO));
 	}
 	
 	

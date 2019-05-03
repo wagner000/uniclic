@@ -45,29 +45,33 @@
 		</h:panelGroup>
 
 	</p:panelGrid>
-
+						
+	<p:commandButton process="@this" value="Adicionar Pagamento"
+		action="#{cadastroAtendimentoBean.adicionarPagamento}" update="tabelaItens" />
+	
 	<p:dataTable value="#{cadastroAtendimentoBean.atendimento.pagamentos}"
-		var="item" id="tabelaItens" rowIndexVar="linha" style="width:480px;">
+		var="item" id="tabelaItens" rowIndexVar="linha" style="width:480px;"
+		emptyMessage="Nenhum Pagamento encontrado.">
 
 		<p:column headerText="Forma de Pagamento">
 
 			<h:outputText value="#{item.formaPagamento.descricao}"
-				rendered="#{not item.ok}" />
+				rendered="#{item.ok}" />
 
 			<p:selectOneMenu id="formaPagamento" style="width:90%;"
-				value="#{item.formaPagamento}" rendered="#{item.ok}">
+				value="#{item.formaPagamento}" rendered="#{not item.ok}">
 				<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
-				<f:selectItems value="#{cadastroAtendimentoBean.pagamentos}"
+				<f:selectItems value="#{cadastroAtendimentoBean.formasPagamento}"
 					itemValue="#{formaPag}" itemLabel="#{formaPag.descricao}"
 					var="formaPag" />
+			<p:ajax event="itemSelect" update="tabelaItens"/>					
 			</p:selectOneMenu>
 		</p:column>
 
 		<p:column headerText="Valor" style="text-align: center; width: 100px">
 			<p:inputText size="8" value="#{item.valor}" readonly="false"
 				onkeydown="if (event.keyCode === 13) {onchange();return false;}">
-				<p:ajax event="change" update="tabelaItens"
-					listener="#{cadastroAtendimentoBean.atualizarValor(item)}" />
+				<p:ajax event="change" update="tabelaItens" listener="#{cadastroAtendimentoBean.atualizaPagamentos(linha)}" />
 			</p:inputText>
 		</p:column>
 

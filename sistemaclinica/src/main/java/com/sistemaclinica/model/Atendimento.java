@@ -142,9 +142,14 @@ public class Atendimento implements Serializable {
 	@Transient
 	public BigDecimal getValorTotal() {
 		
-		if(getValor() != null && getDesconto() !=null) {
-			BigDecimal total = getValor().subtract(getDesconto());
-			return total;
+		if(getValor() != null ) {
+			
+			if(getDesconto() !=null) {
+				BigDecimal total = getValor().subtract(getDesconto());
+				return total;
+			}else
+				return getValor();
+			
 		}else
 			return BigDecimal.ZERO;
 	}

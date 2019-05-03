@@ -54,7 +54,8 @@ public class CadastroAtendimentoBean implements Serializable {
 	@Inject
 	private MedicoDAO medicoDao;
 	@Inject
-	private FormaPagamentoDAO pagamentoDAO;
+	private FormaPagamentoDAO formaPagDAO;
+	private List<FormaPagamento> formasPagamento;
 	
 	private Atendimento atendimento;
 	private List<Atendimento> atendimentos;
@@ -64,7 +65,7 @@ public class CadastroAtendimentoBean implements Serializable {
 	private List<Paciente> pacientes;
 	private List<Medico> medicos;
 	
-	private FormaPagamento formaPagamento;
+	private Pagamento novoPagamento;
 	
 	private ScheduleModel schedule;
 	
@@ -72,9 +73,11 @@ public class CadastroAtendimentoBean implements Serializable {
 
 	public void init() {
 		if(FacesUtil.isNotPostback()) {
+			
 			atendimento = new Atendimento();
 			atendimentos = atendimentoDAO.todos();
 			procedimentos = procedimentoDAO.todos();
+			formasPagamento = formaPagDAO.todos();
 			convenios = convenioDAO.todos();
 			pacientes = pacienteDAO.todos();
 			//medicos = medicoDao.medicosHoje();
@@ -82,8 +85,6 @@ public class CadastroAtendimentoBean implements Serializable {
 			
 			carregarListaHoje();
 			carregarSchedule();
-			
-			formaPagamento = new FormaPagamento();
 		}
 	}
 	
@@ -135,7 +136,8 @@ public class CadastroAtendimentoBean implements Serializable {
 		for(Atendimento at : atendimentos) {
 			if(at.getId() == (Long) event.getData()) {
 				atendimento = atendimentoDAO.porId(at.getId());
-				
+				System.out.println("*********** ATEND VSLOR: "+atendimento.getValor());
+				System.out.println("*********** ATEND VSLOR TOTAL: "+atendimento.getValorTotal());
 				if(atendimento.isEditavel()) {
 					atendimento.setDesconto(BigDecimal.ZERO);
 					//atendimento.adcionarItemVazio();
@@ -220,63 +222,38 @@ public class CadastroAtendimentoBean implements Serializable {
 		return medicoDao.todos();
 	}
 	
-	public void atualizarValor(Pagamento pagamento) {
+	public void atualizaPagamentos(int linha) {
 		
-		//atendimento.getPagamentos().get(0).setFormaPagamento(pagamento.getFormaPagamento());
-		
-		System.out.println("**** ID ATEND: "+atendimento.getPagamentos().get(0).getAtendimento().getId());
-		System.out.println("*** FORMA PAG: "+atendimento.getPagamentos().get(0).getFormaPagamento().getDescricao());
-		
-		System.out.println("**** PAGA: "+pagamento.getFormaPagamento().getDescricao());
-		
-		//atendimento.adcionarItemVazio();
-		
-		/*if(pagamento.getValor().compareTo(BigDecimal.ZERO) <= 0) {
-			pagamento.setValor(BigDecimal.ZERO);
-			return;
+		System.out.println("****** SIZE ANTES: "+atendimento.getPagamentos().size());
+		if(atendimento.getPagamentos().get(linha).getValor().compareTo(BigDecimal.ZERO)<=0) {
+			atendimento.getPagamentos().remove(linha);
+			System.out.println("****** SIZE DPOIS: "+atendimento.getPagamentos().size());
 		}
-		if(atendimento.getValorPago().compareTo(atendimento.getValorTotal()) != 0
-				&& pagamento.getFormaPagamento() != null) {
-			
-		}*/
-	}
-	
-	/*
-	public void carregarLinhaEditavel() {
 		
-		
-		
-		
-		ItemPedido item = this.pedido.getItens().get(0);
-		
-		if(produtoLinhaEditavel != null) {
-			if(this.existeItemComProduto(this.produtoLinhaEditavel)) {
-				FacesUtil.addErrorMessage("Produto já consta no pedido!");
-			}else {
-				item.setProduto(this.produtoLinhaEditavel);
-				this.pedido.adcionarItemVazio();
-				this.produtoLinhaEditavel = null;
-				this.codigo = null;
-			}
-		}
-	}
-	
-	//verifica se o produto já está inserido no pedido
-	private boolean existeItemComProduto(Produto produto) {
-		boolean existeItem = false;
-		
-		for(ItemPedido item : this.pedido.getItens()) {
-			if(produto.equals(item.getProduto())) {
-				existeItem = true;
+		/*remove pagamento com valor < 0
+		for (Pagamento p : atendimento.getPagamentos()) {
+			System.out.println("******VALOR: " +p.getValor());
+			if (p.getValor().compareTo(BigDecimal.ZERO) <= 0) {
+				atendimento.getPagamentos().remove();
 				break;
 			}
 		}
-		return existeItem;
+
+		if (atendimento.getValorPago().compareTo(atendimento.getValorTotal()) < 0) {
+			atendimento.getPagamentos().add(0, new Pagamento());
+		}
+		// atendimento = atendimentoDAO.porId(atendimento.getId());
+*/
 	}
-	*/
-	public List<FormaPagamento> getPagamentos() {
-		return pagamentoDAO.todos();
+	
+	public void adicionarPagamento() {
+		
+		atendimento.getPagamentos().add(0, new Pagamento());
 	}
+	
+	//=================================================================================================
+	//==================GETTERS AND SETTERS ==============
+	//===================================================================================================
 	
 	public StatusAtendimento[] getStatus() {
 		return StatusAtendimento.values();
@@ -358,12 +335,20 @@ public class CadastroAtendimentoBean implements Serializable {
 		this.diaAtivo = diaAtivo;
 	}
 
-	public FormaPagamento getFormaPagamento() {
-		return formaPagamento;
+	public Pagamento getNovoPagamento() {
+		return novoPagamento;
 	}
 
-	public void setFormaPagamento(FormaPagamento formaPagamento) {
-		this.formaPagamento = formaPagamento;
+	public void setNovoPagamento(Pagamento novoPagamento) {
+		this.novoPagamento = novoPagamento;
+	}
+
+	public List<FormaPagamento> getFormasPagamento() {
+		return formasPagamento;
+	}
+
+	public void setFormasPagamento(List<FormaPagamento> formasPagamento) {
+		this.formasPagamento = formasPagamento;
 	}
 
 	
