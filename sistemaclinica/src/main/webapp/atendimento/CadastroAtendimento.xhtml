@@ -8,7 +8,7 @@
 	<ui:define name="titulo">Atendimentos</ui:define>
 	<ui:define name="corpo">
 		<f:metadata>
-			<o:viewParam name="atendimento" />
+			
 			<f:event listener="#{cadastroAtendimentoBean.init}"
 				type="preRenderView" />
 		</f:metadata>
@@ -151,16 +151,16 @@
 				
 				<ui:include src="/WEB-INF/template/atendimento/Pagamento.xhtml" />
 				
-				
 				</p:tab>
-				
 				</p:tabView>
 				
 				
 				<p:commandButton value="Salvar" 
 					style="margin-top:10px" rendered="#{cadastroAtendimentoBean.atendimento.editavel}"
-					actionListener="#{cadastroAtendimentoBean.salvar}"
-					update=":frmAtendimento:schedule,:frmAtendimento:tabView, msgs, listaHoje " />
+					action="#{cadastroAtendimentoBean.salvar}" process=":frmAtendimento:atendDialog"
+					update="@form" />
+					<!-- update=":frmAtendimento:schedule,:frmAtendimento:tabView, msgs, listaHoje" /> -->
+					
 				<p:spacer/><p:spacer/>
 				
 				<p:commandButton value="Cancelar" rendered="#{cadastroAtendimentoBean.atendimento.cancelavel}"

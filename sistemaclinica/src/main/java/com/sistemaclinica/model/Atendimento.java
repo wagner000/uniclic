@@ -133,7 +133,7 @@ public class Atendimento implements Serializable {
 	public void removerItemVazio() {
 		Pagamento primeiroItem = this.getPagamentos().get(0);
 		
-		if(primeiroItem != null && primeiroItem.getAtendimento().getId()==null) {
+		if(primeiroItem.isNotOk()) {
 			this.getPagamentos().remove(0);
 		}
 	}
@@ -252,7 +252,7 @@ public class Atendimento implements Serializable {
 	}
 
 	
-	@OneToMany(mappedBy = "atendimento", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "atendimento", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	public List<Pagamento> getPagamentos() {
 		return pagamentos;
 	}

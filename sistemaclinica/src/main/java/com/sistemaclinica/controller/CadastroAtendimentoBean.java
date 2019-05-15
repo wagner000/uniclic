@@ -115,13 +115,20 @@ public class CadastroAtendimentoBean implements Serializable {
 	public void dateSelect(SelectEvent evento) {
 		atendimento = new Atendimento();
 		atendimento.setData((Date)evento.getObject());
-		//Date hoje = new Date();
-		medicos = medicoDao.medicosNoDia(atendimento.getData());
-		RequestContext.getCurrentInstance().execute("PF('atendDialog').show();");
+		//medicos = medicoDao.medicosNoDia(atendimento.getData());
+		medicos = medicoDao.todos();
 		
-		/*if(atendimento.getData().getDate() >= hoje.getDate()) {
-			RequestContext.getCurrentInstance().execute("PF('atendDialog').show();");
-		}*/
+		Date hoje = new Date();
+		hoje.setHours(0);
+		hoje.setMinutes(0);
+		hoje.setSeconds(0);
+
+		//NÃO PERMITE AGENDAMENTOS COM DATA RETROATIVA
+		if(atendimento.getData().getYear() == hoje.getYear() && atendimento.getData().getMonth() == hoje.getMonth()) {
+			if(atendimento.getData().getDate() >= hoje.getDate()) {
+				RequestContext.getCurrentInstance().execute("PF('atendDialog').show();");
+			}
+		}
 	}
 	
 	public void eventSelect(SelectEvent selectEvent) {
@@ -130,17 +137,17 @@ public class CadastroAtendimentoBean implements Serializable {
 		DefaultScheduleEvent event = (DefaultScheduleEvent) selectEvent.getObject();
 		
 		if(medicos == null || medicos.size() == 0 ) {
-			medicos = medicoDao.medicosNoDia(event.getStartDate());
+			//medicos = medicoDao.medicosNoDia(event.getStartDate());
+			medicos = medicoDao.todos();
 		}
 		
 		for(Atendimento at : atendimentos) {
 			if(at.getId() == (Long) event.getData()) {
 				atendimento = atendimentoDAO.porId(at.getId());
-				System.out.println("*********** ATEND VSLOR: "+atendimento.getValor());
-				System.out.println("*********** ATEND VSLOR TOTAL: "+atendimento.getValorTotal());
+
 				if(atendimento.isEditavel()) {
 					atendimento.setDesconto(BigDecimal.ZERO);
-					//atendimento.adcionarItemVazio();
+					atualizaPagamentos(null, 0);
 				}
 				return;
 			}
@@ -170,8 +177,8 @@ public class CadastroAtendimentoBean implements Serializable {
 	 }
 	
 	public void salvar() {
-		
 		try {
+			atendimento.removerItemVazio();
 			this.atendimento = atendimentoDAO.salvar(atendimento);
 			carregarSchedule();
 			carregarListaHoje();
@@ -180,12 +187,10 @@ public class CadastroAtendimentoBean implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public void cancelarAtendimento() {
 		this.atendimento = atendimentoDAO.cancelar(this.atendimento);
-		//this.salvar();
 	}
 	
 	public void limparForm() {
@@ -222,33 +227,29 @@ public class CadastroAtendimentoBean implements Serializable {
 		return medicoDao.todos();
 	}
 	
-	public void atualizaPagamentos(int linha) {
-		
-		System.out.println("****** SIZE ANTES: "+atendimento.getPagamentos().size());
-		if(atendimento.getPagamentos().get(linha).getValor().compareTo(BigDecimal.ZERO)<=0) {
-			atendimento.getPagamentos().remove(linha);
-			System.out.println("****** SIZE DPOIS: "+atendimento.getPagamentos().size());
-		}
-		
-		/*remove pagamento com valor < 0
-		for (Pagamento p : atendimento.getPagamentos()) {
-			System.out.println("******VALOR: " +p.getValor());
-			if (p.getValor().compareTo(BigDecimal.ZERO) <= 0) {
-				atendimento.getPagamentos().remove();
-				break;
+	public void atualizaPagamentos(Pagamento p, int linha) {
+		if(p!=null) {
+			if(p.isNotOk() && linha != 0) {
+				atendimento.getPagamentos().remove(linha);
 			}
 		}
-
-		if (atendimento.getValorPago().compareTo(atendimento.getValorTotal()) < 0) {
-			atendimento.getPagamentos().add(0, new Pagamento());
+		
+		if(atendimento.getPagamentos().isEmpty()) {
+			atendimento.adcionarItemVazio();
+			return;
 		}
-		// atendimento = atendimentoDAO.porId(atendimento.getId());
-*/
+		
+		if(atendimento.getPagamentos().get(0).isOk() &&
+				atendimento.getValorPago().compareTo(atendimento.getValorTotal()) < 0) {
+			atendimento.adcionarItemVazio();
+		}
 	}
 	
 	public void adicionarPagamento() {
+		Pagamento pag = new Pagamento();
+		pag.setAtendimento(atendimento);
 		
-		atendimento.getPagamentos().add(0, new Pagamento());
+		atendimento.getPagamentos().add(0, pag);
 	}
 	
 	//=================================================================================================

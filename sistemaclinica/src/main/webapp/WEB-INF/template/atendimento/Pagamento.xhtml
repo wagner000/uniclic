@@ -45,9 +45,6 @@
 		</h:panelGroup>
 
 	</p:panelGrid>
-						
-	<p:commandButton process="@this" value="Adicionar Pagamento"
-		action="#{cadastroAtendimentoBean.adicionarPagamento}" update="tabelaItens" />
 	
 	<p:dataTable value="#{cadastroAtendimentoBean.atendimento.pagamentos}"
 		var="item" id="tabelaItens" rowIndexVar="linha" style="width:480px;"
@@ -60,18 +57,18 @@
 
 			<p:selectOneMenu id="formaPagamento" style="width:90%;"
 				value="#{item.formaPagamento}" rendered="#{not item.ok}">
-				<f:selectItem itemLabel="Selecione..." noSelectionOption="true" />
+				
 				<f:selectItems value="#{cadastroAtendimentoBean.formasPagamento}"
 					itemValue="#{formaPag}" itemLabel="#{formaPag.descricao}"
 					var="formaPag" />
-			<p:ajax event="itemSelect" update="tabelaItens"/>					
+			<p:ajax event="itemSelect" update="tabelaItens" listener="#{cadastroAtendimentoBean.atualizaPagamentos(item,linha)}"/>					
 			</p:selectOneMenu>
 		</p:column>
 
 		<p:column headerText="Valor" style="text-align: center; width: 100px">
 			<p:inputText size="8" value="#{item.valor}" readonly="false"
 				onkeydown="if (event.keyCode === 13) {onchange();return false;}">
-				<p:ajax event="change" update="tabelaItens" listener="#{cadastroAtendimentoBean.atualizaPagamentos(linha)}" />
+				<p:ajax event="change" update="tabelaItens" listener="#{cadastroAtendimentoBean.atualizaPagamentos(item,linha)}" />
 			</p:inputText>
 		</p:column>
 

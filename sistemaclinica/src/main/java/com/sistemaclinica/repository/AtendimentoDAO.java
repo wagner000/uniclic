@@ -33,6 +33,14 @@ public class AtendimentoDAO implements Serializable {
 
 	@Transacional
 	public Atendimento salvar(Atendimento atendimento) {
+		/*Atendimento atend = manager.merge(atendimento);
+		if(atend.getPagamentos()!=null && atend.getPagamentos().size()!=0) {
+			for(Pagamento pag :atend.getPagamentos()) {
+				manager.merge(pag);
+			}
+		}
+		return atend;
+		*/
 		return manager.merge(atendimento);
 	}
 
