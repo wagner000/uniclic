@@ -131,16 +131,19 @@ public class Atendimento implements Serializable {
 	}
 	
 	public void removerItemVazio() {
-		Pagamento primeiroItem = this.getPagamentos().get(0);
 		
-		if(primeiroItem.isNotOk()) {
-			this.getPagamentos().remove(0);
+		if(getPagamentos()!=null && !getPagamentos().isEmpty()) {
+			Pagamento primeiroItem = this.getPagamentos().get(0);
+			
+			if(primeiroItem.isNotOk()) {
+				this.getPagamentos().remove(0);
+			}
 		}
 	}
 	
 	
 	@Transient
-	public BigDecimal getValorTotal() {
+	public BigDecimal getValorTotal() { //valor total a pagar = valor do atendimento menos desconto
 		
 		if(getValor() != null ) {
 			
@@ -180,6 +183,14 @@ public class Atendimento implements Serializable {
 	}
 	
 	@Transient
+	public boolean isNovo() {
+		if(getId()!=null) {
+			return false;
+		}else
+			return true;
+	}
+	
+	@Transient
 	public boolean isAgendado() {
 		return ( StatusAtendimento.AGENDADO.equals(this.getStatus()) && this.getId()!=null );
 	}
@@ -197,6 +208,19 @@ public class Atendimento implements Serializable {
 	@Transient
 	public boolean isFinalizado() {
 		return StatusAtendimento.FINALIZADO.equals(this.getStatus());
+	}
+	
+	@Transient
+	public boolean isFinalizavel() {
+		
+		if(getPagamentos() != null && !getPagamentos().isEmpty() && getId() != null ) {
+			if(getValorTotal().compareTo(getValorPago())==0) {
+				return true;
+			}
+		}
+		
+		return false;
+		
 	}
 	
 	@Transient

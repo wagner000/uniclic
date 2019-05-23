@@ -77,6 +77,24 @@ public class AtendimentoDAO implements Serializable {
 			return atendimento;
 		
 	}
+	
+	@Transacional
+	public Atendimento finalizar(Atendimento atendimento){
+			if(atendimento.isCancelado()) {
+				throw new NegocioException("Este atendimento já está Cancelado!");
+			}
+			if(atendimento.isFinalizado()) {
+				throw new NegocioException("Este atendimento já foi Finalizado!");
+			}
+			
+			if(atendimento.isFinalizavel()) {
+				atendimento = this.salvar(atendimento);
+				atendimento.setStatus(StatusAtendimento.FINALIZADO);
+				atendimento = this.salvar(atendimento);
+				return atendimento;
+			}else
+				throw new NegocioException("Este atendimento não pode ser Finalizado!");
+	}
 
 	public List<Atendimento> todos() {
 

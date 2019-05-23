@@ -191,6 +191,12 @@ public class CadastroAtendimentoBean implements Serializable {
 	
 	public void cancelarAtendimento() {
 		this.atendimento = atendimentoDAO.cancelar(this.atendimento);
+		
+	}
+	
+	public void finalizarAtendimento() {
+		this.atendimento = atendimentoDAO.finalizar(this.atendimento);
+		FacesUtil.addInfoMessage("Agendamento Finalizado com sucesso.");
 	}
 	
 	public void limparForm() {
@@ -243,13 +249,6 @@ public class CadastroAtendimentoBean implements Serializable {
 				atendimento.getValorPago().compareTo(atendimento.getValorTotal()) < 0) {
 			atendimento.adcionarItemVazio();
 		}
-	}
-	
-	public void adicionarPagamento() {
-		Pagamento pag = new Pagamento();
-		pag.setAtendimento(atendimento);
-		
-		atendimento.getPagamentos().add(0, pag);
 	}
 	
 	//=================================================================================================
@@ -352,5 +351,4 @@ public class CadastroAtendimentoBean implements Serializable {
 		this.formasPagamento = formasPagamento;
 	}
 
-	
 }

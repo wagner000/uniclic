@@ -147,7 +147,7 @@
 				</p:panelGrid>
 				
 				</p:tab>
-				<p:tab title="Pagamento" rendered="#{cadastroAtendimentoBean.atendimento.cancelavel}">
+				<p:tab title="Pagamento" rendered="#{not cadastroAtendimentoBean.atendimento.novo}">
 				
 				<ui:include src="/WEB-INF/template/atendimento/Pagamento.xhtml" />
 				
@@ -155,7 +155,7 @@
 				</p:tabView>
 				
 				
-				<p:commandButton value="Salvar" 
+				<p:commandButton value="Salvar" id="salvarButton"
 					style="margin-top:10px" rendered="#{cadastroAtendimentoBean.atendimento.editavel}"
 					action="#{cadastroAtendimentoBean.salvar}" process=":frmAtendimento:atendDialog"
 					update="@form" />
@@ -163,10 +163,19 @@
 					
 				<p:spacer/><p:spacer/>
 				
-				<p:commandButton value="Cancelar" rendered="#{cadastroAtendimentoBean.atendimento.cancelavel}"
+				<p:commandButton value="Finalizar" id="finalizarButton" rendered="#{cadastroAtendimentoBean.atendimento.cancelavel}"
+					style="margin-top:10px; background:green; color: white;text-shadow: none;"
+					actionListener="#{cadastroAtendimentoBean.finalizarAtendimento}" process="@this"
+						update=":frmAtendimento:msgs, :frmAtendimento:tabView,salvarButton,finalizarButton,excluirButton " />
+				
+				<p:spacer/><p:spacer/>
+				
+				<!-- somente se usuario administrador -->
+				<p:commandButton value="Excluir" id="excluirButton" rendered="#{cadastroAtendimentoBean.atendimento.cancelavel}"
 					style="margin-top:10px; background:red; color: white;text-shadow: none;"
 					oncomplete="PF('confirmacaoExclusao').show()" process="@this"
-						update=":frmAtendimento:confirmacaoExclusaoDialog,:frmAtendimento:confirmacaoExclusaoDialog " />				
+						update=":frmAtendimento:confirmacaoExclusaoDialog" />
+										
 			</p:dialog>
 			
 			
