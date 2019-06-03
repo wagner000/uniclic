@@ -160,8 +160,8 @@ public class CadastroAtendimentoBean implements Serializable {
 	public void eventMove(ScheduleEntryMoveEvent scheduleEntryMoveEvent){
 		Atendimento a = atendimentoDAO.porId((Long) scheduleEntryMoveEvent.getScheduleEvent().getData());
 		
-		if(StatusAtendimento.FINALIZADO.equals(a.getStatus())) {
-			throw new NegocioException("Atendimento já Finalizado!");
+		if(!a.isEditavel()) {
+			throw new NegocioException("Atendimento "+a.getStatus().getDescricao()+"!");
 		}else {
 			java.util.Calendar newCal = new GregorianCalendar();
 			newCal.setTime(a.getData());
@@ -186,6 +186,21 @@ public class CadastroAtendimentoBean implements Serializable {
 			RequestContext.getCurrentInstance().execute("PF('atendDialog').hide();");
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void excluir() {
+		try {
+			atendimento.removerItemVazio();
+			atendimentoDAO.remover(atendimento);
+			this.atendimento = new Atendimento();
+			carregarSchedule();
+			carregarListaHoje();
+			FacesUtil.addInfoMessage("Agendamento Excluído.");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new NegocioException("Erro ao excluir!");
 		}
 	}
 	

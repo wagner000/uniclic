@@ -19,83 +19,78 @@ import com.sistemaclinica.util.jsf.FacesUtil;
 public class CadastroUsuarioBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Usuario usuario;
-	
+
 	@Inject
 	private UsuarioDAO usuarioService;
-	
+
 	private Grupo grupo;
 	@Inject
 	private GrupoDAO grupoDAO;
 	private List<Grupo> grupos = new ArrayList<Grupo>();
-	
-	
-	
-	public CadastroUsuarioBean () {
+
+	public CadastroUsuarioBean() {
 		usuario = new Usuario();
 	}
-	
+
 	public void init() {
-		if(FacesUtil.isNotPostback()) {
+		if (FacesUtil.isNotPostback()) {
 			grupos = grupoDAO.todos();
-			
-			if(usuario.getId()!=null) {
+
+			if (usuario.getId() != null) {
 				this.grupo = usuario.getGrupos().get(0);
 			}
 		}
 	}
-	
-	
+
 	public void salvar() {
 		try {
-			this.usuario.getGrupos().set(0, grupo);
+			this.usuario.getGrupos().add(0, this.grupo);
 			this.usuario = usuarioService.salvar(this.usuario);
 			limpar();
 			FacesUtil.addInfoMessage("usuario salvo com sucesso!");
 		} catch (Exception ne) {
-			System.out.println(ne.getMessage());
+			ne.printStackTrace();
 			FacesUtil.addErrorMessage(ne.getMessage());
 		}
 	}
-	
-	//limpa todos os campos
-		public void limpar() {
-			usuario = new Usuario();
-			grupo = new Grupo();
-		}
-		
-		
-		
-		public boolean isEditando() {
-			return this.usuario.getId() != null;
-		}
-		
-		//============================== GETTERS AND SETTERS ===============================================
-		
-		public Usuario getUsuario() {
-			return usuario;
-		}
 
-		public void setUsuario(Usuario usuario) {
-			this.usuario = usuario;
-		}
+	// limpa todos os campos
+	public void limpar() {
+		usuario = new Usuario();
+		grupo = new Grupo();
+	}
 
+	public boolean isEditando() {
+		return this.usuario.getId() != null;
+	}
 
-		public Grupo getGrupo() {
-			return grupo;
-		}
+	// ============================== GETTERS AND SETTERS
+	// ===============================================
 
-		public void setGrupo(Grupo grupo) {
-			this.grupo = grupo;
-		}
+	public Usuario getUsuario() {
+		return usuario;
+	}
 
-		public List<Grupo> getGrupos() {
-			return grupos;
-		}
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 
-		public void setGrupos(List<Grupo> grupos) {
-			this.grupos = grupos;
-		}
+	public Grupo getGrupo() {
+		return grupo;
+	}
+
+	public void setGrupo(Grupo grupo) {
+		this.grupo = grupo;
+	}
+
+	public List<Grupo> getGrupos() {
+		return grupos;
+	}
+
+	public void setGrupos(List<Grupo> grupos) {
+		this.grupos = grupos;
+	}
 
 }

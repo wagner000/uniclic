@@ -42,6 +42,8 @@ public class Seguranca {
 		return usuario;
 	}
 	
+	
+	
 	public boolean isEmitirPedidoPermitido() {
 		return externalContext.isUserInRole("ADMINISTRADORES") 
 				|| externalContext.isUserInRole("VENDEDORES");

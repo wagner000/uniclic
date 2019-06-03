@@ -111,12 +111,6 @@
 							var="med" />
 						</p:selectOneMenu>
 					
-					
-						<!-- <p:autoComplete
-							value="#{cadastroAtendimentoBean.atendimento.medico}" id="medico"
-							completeMethod="#{cadastroAtendimentoBean.carregaMedicos()}"
-							var="med" itemLabel="#{med.nome}" itemValue="#{med}"
-							forceSelection="true" size="30" /> -->
 						<span />
 					</h:panelGroup>
 
@@ -139,7 +133,7 @@
 						timeZone="GMT-3" pattern="dd/MM/yyyy HH:mm" />
 
 					<p:outputLabel value="Observações" />
-					<p:inputTextarea 
+					<p:inputTextarea value="#{cadastroAtendimentoBean.atendimento.observacoes}"
 						disabled="#{not cadastroAtendimentoBean.atendimento.editavel}"
 						placeholder="Escreva aqui alguma observação..."
 						style="width:97%" />
@@ -154,7 +148,7 @@
 				</p:tab>
 				</p:tabView>
 				
-				
+				<h:panelGroup id="buttons">
 				<p:commandButton value="Salvar" id="salvarButton"
 					style="margin-top:10px" rendered="#{cadastroAtendimentoBean.atendimento.editavel}"
 					action="#{cadastroAtendimentoBean.salvar}" process=":frmAtendimento:atendDialog"
@@ -166,16 +160,15 @@
 				<p:commandButton value="Finalizar" id="finalizarButton" rendered="#{cadastroAtendimentoBean.atendimento.cancelavel}"
 					style="margin-top:10px; background:green; color: white;text-shadow: none;"
 					actionListener="#{cadastroAtendimentoBean.finalizarAtendimento}" process="@this"
-						update=":frmAtendimento:msgs, :frmAtendimento:tabView,salvarButton,finalizarButton,excluirButton " />
-				
+						update=":frmAtendimento:msgs, :frmAtendimento:tabView, :frmAtendimento:buttons" />
 				<p:spacer/><p:spacer/>
 				
 				<!-- somente se usuario administrador -->
-				<p:commandButton value="Excluir" id="excluirButton" rendered="#{cadastroAtendimentoBean.atendimento.cancelavel}"
+				<p:commandButton value="Excluir" id="excluirButton" rendered="#{seguranca.usuarioLogado.usuario.administrador}"
 					style="margin-top:10px; background:red; color: white;text-shadow: none;"
 					oncomplete="PF('confirmacaoExclusao').show()" process="@this"
 						update=":frmAtendimento:confirmacaoExclusaoDialog" />
-										
+				</h:panelGroup>					
 			</p:dialog>
 			
 			
@@ -186,8 +179,8 @@
 					onclick="PF('confirmacaoExclusao').hide(); return false;" />
 				<p:commandButton value="Sim"
 					onsuccess="PF('confirmacaoExclusao').hide();"
-					action="#{cadastroAtendimentoBean.cancelarAtendimento}"
-					update=":frmAtendimento:msgs, :frmAtendimento:tabView" />
+					actionListener="#{cadastroAtendimentoBean.excluir}"
+					update="@form" />
 			</p:confirmDialog>
 </h:form>
 

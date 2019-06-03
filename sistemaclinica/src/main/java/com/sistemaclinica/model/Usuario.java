@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -31,8 +32,28 @@ public class Usuario implements Serializable {
 	private String senha;
 	private String cpf;
 	private String telefone;
-	private List<Grupo> grupos = new ArrayList<>();
+	private List<Grupo> grupos;
 
+	public Usuario() {
+		
+		grupos = new ArrayList<Grupo>();
+	}
+	
+	@Transient
+	public boolean isAdministrador() {
+		
+		if(grupos !=null && !grupos.isEmpty()) {
+			
+			for(Grupo g :grupos) {
+				if(g.getNome().equals("ADMINISTRADORES")) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id_usuario")

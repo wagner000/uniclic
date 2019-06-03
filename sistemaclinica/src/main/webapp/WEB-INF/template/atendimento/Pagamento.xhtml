@@ -28,6 +28,7 @@
 		<h:panelGroup>
 		<p:outputLabel value="Desconto: R$ " />
 		<p:inputNumber value="#{cadastroAtendimentoBean.atendimento.desconto}"
+			disabled="#{not cadastroAtendimentoBean.atendimento.editavel}"
 			onkeydown="if (event.keyCode === 13) {onchange();return false;}" >
 		<p:ajax event="change" update="valorTotal" />
 		</p:inputNumber>
@@ -59,6 +60,7 @@
 				value="#{item.formaPagamento}" rendered="#{not item.ok}">
 				
 				<f:selectItems value="#{cadastroAtendimentoBean.formasPagamento}"
+					disabled="#{not cadastroAtendimentoBean.atendimento.editavel}"
 					itemValue="#{formaPag}" itemLabel="#{formaPag.descricao}"
 					var="formaPag" />
 			<p:ajax event="itemSelect" update="tabelaItens" listener="#{cadastroAtendimentoBean.atualizaPagamentos(item,linha)}"/>					
@@ -66,7 +68,7 @@
 		</p:column>
 
 		<p:column headerText="Valor" style="text-align: center; width: 100px">
-			<p:inputText size="8" value="#{item.valor}" readonly="false"
+			<p:inputText size="8" value="#{item.valor}" disabled="#{not cadastroAtendimentoBean.atendimento.editavel}"
 				onkeydown="if (event.keyCode === 13) {onchange();return false;}">
 				<p:ajax event="change" update="tabelaItens" listener="#{cadastroAtendimentoBean.atualizaPagamentos(item,linha)}" />
 			</p:inputText>

@@ -74,7 +74,7 @@ public class Convenio implements Serializable {
 		return true;
 	}
 	
-	@OneToMany(mappedBy="convenio", cascade=CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(mappedBy="convenio", cascade=CascadeType.ALL)
 	public List<ConvenioValor> getValores() {
 		return valores;
 	}

@@ -54,12 +54,7 @@ public class AtendimentoDAO implements Serializable {
 			manager.remove(atendimento);
 			manager.flush();
 		} catch (PersistenceException e) {
-			try {
-				throw new NegocioException("Este Atendimento não pode ser removido");
-			} catch (NegocioException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			e.printStackTrace();
 		}
 	}
 	
